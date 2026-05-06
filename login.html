@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – Doenças Crônicas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --blue-dark: #0a2540;
+      --blue-mid: #1565c0;
+      --blue-light: #4fc3f7;
+      --green: #2e7d32;
+      --green-light: #66bb6a;
+      --orange: #e65100;
+      --orange-light: #ffa726;
+      --bg: #f0f4f8;
+      --white: #ffffff;
+      --text: #1a2332;
+      --muted: #546e7a;
+      --err: #c62828;
+      --ok: #2e7d32;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body {
+      font-family: 'Nunito Sans', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0a1628 0%, #0d2137 40%, #0a2540 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .site-header {
+      position: relative;
+      z-index: 10;
+      background: rgba(10, 37, 64, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      height: 64px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07), 0 4px 24px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(79, 195, 247, 0.15);
+    }
+
+    .logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .logo-pulse {
+      display: inline-block;
+      animation: heartbeat 1.6s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14%      { transform: scale(1.25); }
+      28%      { transform: scale(1); }
+      42%      { transform: scale(1.15); }
+      56%      { transform: scale(1); }
+    }
+
+    .page-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .login-wrap {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 24px;
+      box-shadow:
+        0 0 0 1px rgba(79, 195, 247, 0.18),
+        0 8px 32px rgba(0, 0, 0, 0.35),
+        0 32px 80px rgba(0, 0, 0, 0.25),
+        0 0 80px rgba(21, 101, 192, 0.08);
+      overflow: hidden;
+      animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .login-top {
+      padding: 32px 32px 24px;
+      text-align: center;
+      border-bottom: 1px solid #e0e7ef;
+      background: linear-gradient(160deg, #f8fbff 0%, #fff 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-top::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      right: -40px;
+      height: 120px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(21, 101, 192, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .profile-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-icon:hover { transform: scale(1.08); }
+
+    .profile-icon.pac {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      box-shadow: 0 4px 16px rgba(21, 101, 192, 0.2);
+    }
+
+    .profile-icon.pro {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      box-shadow: 0 4px 16px rgba(46, 125, 50, 0.2);
+    }
+
+    .profile-icon.psicologia {
+      background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+      box-shadow: 0 4px 16px rgba(106, 27, 154, 0.2);
+    }
+
+    .login-top h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-top p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      padding: 16px 32px 0;
+      background: #f8fafc;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      transition: all .2s;
+      background: none;
+      border-top: 0;
+      border-left: 0;
+      border-right: 0;
+      font-family: inherit;
+      position: relative;
+    }
+
+    .tab::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 50%;
+      right: 50%;
+      height: 3px;
+      transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .tab.active.pac::after {
+      background: var(--blue-mid);
+      left: 0;
+      right: 0;
+    }
+
+    .tab.active.pro::after {
+      background: var(--green);
+      left: 0;
+      right: 0;
+    }
+
+    .tab.active.psicologia::after {
+      background: #6a1b9a;
+      left: 0;
+      right: 0;
+    }
+
+    .tab.active.pac { color: var(--blue-mid) }
+    .tab.active.pro { color: var(--green) }
+    .tab.active.psicologia { color: #6a1b9a }
+
+    .login-body { padding: 28px 32px 32px }
+
+    .panel { display: none; animation: fadePanel 0.3s ease both; }
+    .panel.show { display: block }
+
+    @keyframes fadePanel {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .field { margin-bottom: 18px }
+
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #cdd5df;
+      background: #f8fafc;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: border-color .25s, box-shadow .25s, background .25s;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--blue-mid);
+      box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.12);
+      background: #fff;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 999px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.01em;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+    }
+
+    .btn-shimmer {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer-btn 2.5s ease infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer-btn {
+      0%   { left: -100%; }
+      60%  { left: 150%; }
+      100% { left: 150%; }
+    }
+
+    .btn.pac {
+      background: linear-gradient(135deg, #1976d2, var(--blue-mid));
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(21, 101, 192, 0.3);
+    }
+
+    .btn.pro {
+      background: linear-gradient(135deg, #388e3c, var(--green));
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(46, 125, 50, 0.3);
+    }
+
+    .btn.psicologia {
+      background: linear-gradient(135deg, #7b1fa2, #6a1b9a);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(106, 27, 154, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .btn.loading .spinner { display: inline-block; }
+
+    @keyframes spin { to { transform: rotate(360deg) } }
+
+    .msg {
+      min-height: 1.1rem;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      text-align: center;
+      border-radius: 8px;
+      padding: 0;
+      transition: all 0.3s;
+    }
+
+    .msg.ok {
+      color: var(--ok);
+      font-weight: 700;
+      background: rgba(46, 125, 50, 0.07);
+      padding: 8px 12px;
+    }
+
+    .msg.err {
+      color: var(--err);
+      font-weight: 600;
+      background: rgba(198, 40, 40, 0.07);
+      padding: 8px 12px;
+    }
+
+    .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 14px;
+      text-align: center;
+      line-height: 1.5
+    }
+
+    .hint a {
+      color: var(--blue-mid);
+      text-decoration: none;
+      font-weight: 700
+    }
+
+    .hint a:hover { text-decoration: underline }
+
+    .divider {
+      text-align: center;
+      margin: 20px 0 0;
+      font-size: 0.8rem;
+      color: var(--muted)
+    }
+
+    .divider a {
+      color: var(--blue-mid);
+      text-decoration: none;
+      font-weight: 700
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.35);
+      position: relative;
+      z-index: 5;
+    }
+
+    .glow-ring {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: pulseRing 4s ease-in-out infinite;
+    }
+
+    .glow-ring-1 {
+      width: 600px;
+      height: 600px;
+      left: -200px;
+      top: -200px;
+      background: radial-gradient(circle, rgba(21, 101, 192, 0.06) 0%, transparent 70%);
+      animation-delay: 0s;
+    }
+
+    .glow-ring-2 {
+      width: 500px;
+      height: 500px;
+      right: -150px;
+      bottom: -150px;
+      background: radial-gradient(circle, rgba(46, 125, 50, 0.05) 0%, transparent 70%);
+      animation-delay: 2s;
+    }
+
+    @keyframes pulseRing {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(1.1); opacity: 0.6; }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div class="glow-ring glow-ring-1"></div>
+  <div class="glow-ring glow-ring-2"></div>
+
+  <header class="site-header">
+    <a href="index.html" class="logo">
+      <span class="logo-pulse">❤️</span> Doenças Crônicas
+    </a>
+  </header>
+
+  <div class="page-body">
+    <div class="login-wrap">
+      <div class="login-top">
+        <div class="profile-icon pac" id="profile-icon">👤</div>
+        <h1 id="login-title">Acesso ao Sistema</h1>
+        <p id="login-subtitle">Selecione o perfil e entre com suas credenciais</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active pac" id="tab-pac" onclick="switchTab('pac')">👤 Paciente</button>
+        <button class="tab pro" id="tab-pro" onclick="switchTab('pro')">🩺 Profissional</button>
+        <!-- <button class="tab psicologia" id="tab-psicologia" onclick="switchTab('psicologia')">🧠 Psicologia</button> -->
+      </div>
+
+      <div class="login-body">
+        <!-- PAINEL PACIENTE -->
+        <div class="panel show" id="panel-pac">
+          <form id="form-pac" autocomplete="off">
+            <div class="field">
+              <label>CPF</label>
+              <input type="text" id="pac-cpf" placeholder="000.000.000-00" autocomplete="off" required>
+            </div>
+            <div class="field">
+              <label>Senha <small style="text-transform:none;font-weight:400">(padrão: seu CPF sem pontuação)</small></label>
+              <input type="password" id="pac-senha" placeholder="••••••••" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn pac" id="btn-pac">
+              <span class="spinner"></span>Entrar como Paciente
+              <span class="btn-shimmer"></span>
+            </button>
+            <div class="msg" id="msg-pac"></div>
+          </form>
+          <div class="hint">Ainda não tem cadastro? <a href="cadastro_paciente_publico.html">Cadastre-se aqui</a></div>
+        </div>
+
+        <!-- PAINEL PROFISSIONAL -->
+        <div class="panel" id="panel-pro">
+          <form id="form-pro" autocomplete="off">
+            <div class="field">
+              <label>E-mail ou CPF</label>
+              <input type="text" id="pro-id" placeholder="email@exemplo.com ou CPF" autocomplete="off" required>
+            </div>
+            <div class="field">
+              <label>Senha</label>
+              <input type="password" id="pro-senha" placeholder="••••••••" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn pro" id="btn-pro">
+              <span class="spinner"></span>Entrar como Profissional
+              <span class="btn-shimmer"></span>
+            </button>
+            <div class="msg" id="msg-pro"></div>
+          </form>
+          <div class="hint">Ainda não tem conta? <a href="cadastro_responsavel.html">Cadastre-se aqui</a></div>
+        </div>
+
+        <!-- PAINEL PSICOLOGIA -->
+        <div class="panel" id="panel-psicologia">
+          <form id="form-psicologia" autocomplete="off">
+            <div class="field">
+              <label>E-mail ou CPF</label>
+              <input type="text" id="psicologia-id" placeholder="email@exemplo.com ou CPF" autocomplete="off" required>
+            </div>
+            <div class="field">
+              <label>Senha</label>
+              <input type="password" id="psicologia-senha" placeholder="••••••••" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn psicologia" id="btn-psicologia">
+              <span class="spinner"></span>Entrar como Psicologia
+              <span class="btn-shimmer"></span>
+            </button>
+            <div class="msg" id="msg-psicologia"></div>
+          </form>
+          <div class="hint">Ainda não tem conta? <a href="cadastro_responsavel.html">Cadastre-se aqui</a></div>
+        </div>
+      </div>
+
+      <div class="divider"><a href="index.html">← Voltar ao início</a></div>
+      <div style="height:20px"></div>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Doenças Crônicas</footer>
+
+  <script>
+    // MAPA DE REDIRECIONAMENTO POR CATEGORIA 
+const REDIRECT_MAP = {
+  psicologo              : 'psicologia.html',
+  psicologa              : 'psicologia.html',
+  medico                 : 'responsavel.html',
+  medica                 : 'responsavel.html',
+  enfermeira             : 'enfermeira.html',
+  enfermeiro             : 'enfermeira.html',
+  nutricionista          : 'nutricionista.html',
+  fisioterapeuta         : 'fisioterapeuta.html',
+  tec_enfermagem         : 'tec_enf.html',
+  tec_enf                : 'tec_enf.html',
+  fonoaudiologo          : 'fono.html',
+  fonoaudiologa          : 'fono.html',
+  fono                   : 'fono.html',
+  terapeuta_ocupacional  : 'terapeuta_ocupacional.html',
+  tec_geriatria          : 'tec_geriatria.html',
+  tec_ger                : 'tec_geriatria.html',
+  tec_odontologia        : 'odonto.html',
+  tec_odont              : 'odonto.html',
+  odonto                 : 'odonto.html',
+  familiar               : 'responsavel.html',
+  responsavel            : 'responsavel.html'
+};
+
+function getRedirectByTipo(tipo) {
+  if (!tipo || typeof tipo !== 'string') {
+    return 'responsavel.html';
+  }
+
+  // Normaliza: minúsculas, remove acentos, troca espaços por _
+  let key = tipo.trim().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '_');
+
+  // Técnico de enfermagem — todas variações
+  if (/tec.*enf|enfermagem/.test(key) && !key.includes('enfermeir')) {
+    key = 'tec_enfermagem';
+  }
+  // Enfermeiro/a (sem ser "técnico")
+  else if (key.includes('enfermeir')) {
+    key = 'enfermeira';
+  }
+  // Técnico de geriatria
+  else if (/tec.*geri|geriatria/.test(key)) {
+    key = 'tec_geriatria';
+  }
+  // Técnico de odontologia
+  else if (/tec.*odont|odontologia/.test(key)) {
+    key = 'tec_odontologia';
+  }
+  // Fonoaudiólogo/a
+  else if (key.includes('fono')) {
+    key = 'fonoaudiologo';
+  }
+  // Terapeuta ocupacional
+  else if (key.includes('terapeuta') || key.includes('ocupacional')) {
+    key = 'terapeuta_ocupacional';
+  }
+  // Psicólogo/a
+  else if (key.includes('psicol')) {
+    key = 'psicologo';
+  }
+  // Fisioterapeuta
+  else if (key.includes('fisio')) {
+    key = 'fisioterapeuta';
+  }
+  // Nutricionista
+  else if (key.includes('nutri')) {
+    key = 'nutricionista';
+  }
+  // Médico/a
+  else if (key.includes('medic')) {
+    key = 'medico';
+  }
+  // Familiar
+  else if (key.includes('familiar')) {
+    key = 'familiar';
+  }
+
+  console.log('Tipo original:', tipo, '-> Key processada:', key, '-> Destino:', REDIRECT_MAP[key] || 'responsavel.html');
+
+  return REDIRECT_MAP[key] || 'responsavel.html';
+}
+
+function limparCredenciais() {
+  ['pac-cpf', 'pac-senha', 'pro-id', 'pro-senha', 'psicologia-id', 'psicologia-senha'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['dc_resp_lembrar', 'dc_login_pac', 'dc_login_pro'].forEach(k => {
+    localStorage.removeItem(k);
+    sessionStorage.removeItem(k);
+  });
+}
+
+    // Canvas partículas
+    (function () {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [];
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function Particle() {
+        this.reset = function () {
+          this.x = Math.random() * W;
+          this.y = Math.random() * H;
+          this.r = Math.random() * 1.8 + 0.4;
+          this.vx = (Math.random() - 0.5) * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.4;
+          this.alpha = Math.random() * 0.5 + 0.1;
+        };
+        this.reset();
+      }
+
+      function init() {
+        resize();
+        const count = Math.min(90, Math.floor(W * H / 12000));
+        particles = Array.from({ length: count }, () => new Particle());
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(79,195,247,${(1 - dist / 120) * 0.12})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+
+        for (const p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < -10) p.x = W + 10;
+          if (p.x > W + 10) p.x = -10;
+          if (p.y < -10) p.y = H + 10;
+          if (p.y > H + 10) p.y = -10;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(79,195,247,${p.alpha})`;
+          ctx.fill();
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      init();
+      draw();
+    })();
+
+    const API = 'http://127.0.0.1:5000';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPerfil = urlParams.get('perfil');
+    if (urlPerfil === 'profissional' || urlPerfil === 'responsavel' || urlPerfil === 'pro') switchTab('pro');
+    else if (urlPerfil === 'paciente') switchTab('pac');
+
+    if (urlParams.get('cadastro') === 'ok') {
+      const msg = document.getElementById('msg-pac');
+      msg.textContent = 'Cadastro realizado! Entre com seu CPF e senha.';
+      msg.className = 'msg ok';
+    }
+
+    function switchTab(tab) {
+      document.getElementById('panel-pac').classList.toggle('show', tab === 'pac');
+      document.getElementById('panel-pro').classList.toggle('show', tab === 'pro');
+      document.getElementById('panel-psicologia').classList.toggle('show', tab === 'psicologia');
+
+      ['pac', 'pro', 'psicologia'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.classList.remove('active');
+      });
+      const activeEl = document.getElementById('tab-' + tab);
+      if (activeEl) activeEl.classList.add('active');
+
+      const icon = document.getElementById('profile-icon');
+      const title = document.getElementById('login-title');
+      const sub = document.getElementById('login-subtitle');
+      if (tab === 'pac') {
+        icon.textContent = '👤'; icon.className = 'profile-icon pac';
+        title.textContent = 'Acesso do Paciente';
+        sub.textContent = 'Entre com seu CPF e senha';
+      } else if (tab === 'pro') {
+        icon.textContent = '🩺'; icon.className = 'profile-icon pro';
+        title.textContent = 'Acesso Profissional';
+        sub.textContent = 'Entre com seu e-mail/CPF e senha';
+      } else {
+        icon.textContent = '🧠'; icon.className = 'profile-icon psicologia';
+        title.textContent = 'Acesso – Psicologia';
+        sub.textContent = 'Entre com seu e-mail/CPF e senha';
+      }
+    }
+
+    // LOGIN PACIENTE
+    document.getElementById('form-pac').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg-pac');
+      const btn = document.getElementById('btn-pac');
+      msg.textContent = ''; msg.className = 'msg';
+      btn.disabled = true; btn.classList.add('loading'); btn.childNodes[2].textContent = 'Verificando…';
+
+      const cpf = document.getElementById('pac-cpf').value.trim();
+      const senha = document.getElementById('pac-senha').value;
+
+      try {
+        const resp = await fetch(`${API}/api/pacientes/login`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cpf, senha })
+        });
+        const dados = await resp.json().catch(() => null);
+        if (!resp.ok) {
+          msg.textContent = dados?.erro || 'CPF ou senha incorretos.';
+          msg.className = 'msg err';
+          btn.disabled = false; btn.classList.remove('loading'); btn.childNodes[2].textContent = 'Entrar como Paciente';
+          return;
+        }
+        sessionStorage.removeItem('dc_responsavel');
+        sessionStorage.removeItem('dc_resp_sessao');
+        localStorage.removeItem('dc_resp_lembrar');
+        sessionStorage.setItem('dc_paciente', JSON.stringify(dados.paciente));
+        limparCredenciais();
+        msg.textContent = `Bem-vindo(a), ${dados.paciente.nome}! Redirecionando…`;
+        msg.className = 'msg ok';
+        setTimeout(() => { window.location.href = 'paciente.html'; }, 1200);
+      } catch (err) {
+        msg.textContent = 'Falha na comunicação com o servidor.';
+        msg.className = 'msg err';
+        btn.disabled = false; btn.classList.remove('loading'); btn.childNodes[2].textContent = 'Entrar como Paciente';
+      }
+    });
+
+    // LOGIN PSICOLOGIA (RESPONSÁVEL)
+    document.getElementById('form-psicologia').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg-psicologia');
+      const btn = document.getElementById('btn-psicologia');
+      msg.textContent = ''; msg.className = 'msg';
+      btn.disabled = true; btn.classList.add('loading'); btn.childNodes[2].textContent = 'Verificando…';
+
+      const identificador = document.getElementById('psicologia-id').value.trim();
+      const senha = document.getElementById('psicologia-senha').value;
+
+      try {
+        const resp = await fetch(`${API}/api/responsaveis/login`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identificador, senha })
+        });
+        const dados = await resp.json().catch(() => null);
+        if (!resp.ok) {
+          msg.textContent = dados?.erro || 'Credenciais inválidas.';
+          msg.className = 'msg err';
+          btn.disabled = false; btn.classList.remove('loading'); btn.childNodes[2].textContent = 'Entrar como Profissional';
+          return;
+        }
+        sessionStorage.removeItem('dc_paciente');
+        sessionStorage.setItem('dc_responsavel', JSON.stringify(dados.responsavel));
+        sessionStorage.setItem('dc_resp_sessao', JSON.stringify({
+          id: dados.responsavel.id,
+          nome: dados.responsavel.nome,
+          identificador: identificador
+        }));
+        limparCredenciais();
+        msg.textContent = `Bem-vindo(a), ${dados.responsavel.nome}! Redirecionando…`;
+        msg.className = 'msg ok';
+        const tipoPsi = dados.responsavel.tipo_responsavel || '';
+        const destinoPsi = getRedirectByTipo(tipoPsi);
+        setTimeout(() => { window.location.href = destinoPsi; }, 1200);
+      } catch (err) {
+        msg.textContent = 'Falha na comunicação com o servidor.';
+        msg.className = 'msg err';
+        btn.disabled = false; btn.classList.remove('loading'); btn.childNodes[2].textContent = 'Entrar como Profissional';
+      }
+    });
+
+    // LOGIN PROFISSIONAL — COM REDIRECIONAMENTO POR CATEGORIA
+    document.getElementById('form-pro').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg-pro');
+      const btn = document.getElementById('btn-pro');
+      msg.textContent = '';
+      msg.className = 'msg';
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.childNodes[2].textContent = 'Verificando…';
+
+      const identificador = document.getElementById('pro-id').value.trim();
+      const senha = document.getElementById('pro-senha').value;
+
+      try {
+        const resp = await fetch(`${API}/api/responsaveis/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identificador, senha })
+        });
+        const dados = await resp.json().catch(() => null);
+
+        if (!resp.ok) {
+          msg.textContent = dados?.erro || 'Credenciais inválidas.';
+          msg.className = 'msg err';
+          btn.disabled = false;
+          btn.classList.remove('loading');
+          btn.childNodes[2].textContent = 'Entrar como Profissional';
+          return;
+        }
+
+        // Limpa sessão de paciente e grava sessão de profissional
+        sessionStorage.removeItem('dc_paciente');
+        sessionStorage.setItem('dc_responsavel', JSON.stringify(dados.responsavel));
+        sessionStorage.setItem('dc_resp_sessao', JSON.stringify({
+          id: dados.responsavel.id,
+          nome: dados.responsavel.nome,
+          identificador: identificador
+        }));
+
+        // calcula destino UMA vez
+        const tipo = dados.responsavel.tipo_responsavel || '';
+        const destino = getRedirectByTipo(tipo);
+
+        limparCredenciais();
+        msg.textContent = `Bem-vindo(a), ${dados.responsavel.nome}! Redirecionando…`;
+        msg.className = 'msg ok';
+
+        setTimeout(() => {
+          window.location.href = destino;
+        }, 1200);
+
+      } catch (err) {
+        console.error(err);
+        msg.textContent = 'Falha na comunicação com o servidor.';
+        msg.className = 'msg err';
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        btn.childNodes[2].textContent = 'Entrar como Profissional';
+      }
+    });
+
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) { limparCredenciais(); }
+    });
+  </script>
+</body>
+</html>

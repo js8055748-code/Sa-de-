@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Profissional – Psicologia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink:        #1a1a2e;
+      --ink-light:  #3d3d5c;
+      --muted:      #6b6b8a;
+      --rule:       #d8d8e8;
+      --bg:         #f4f3f0;
+      --surface:    #ffffff;
+      --accent:     #2d5986;
+      --accent-dim: #e8eef5;
+      --green:      #1e6b4a;
+      --green-dim:  #e6f2ec;
+      --danger:     #8b2f2f;
+      --danger-dim: #f5e8e8;
+      --gold:       #b08d47;
+      --radius:     6px;
+      --shadow:     0 2px 16px rgba(26,26,46,0.09);
+      --shadow-lg:  0 6px 32px rgba(26,26,46,0.14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--ink);
+      color: #fff;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, #e0b96b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+
+    .header-title span {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .header-badge {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    /* ── PAGE INTRO ── */
+    .page-intro {
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .page-intro-text h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    .page-intro-text h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .page-intro-text p {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    .session-counter {
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .session-counter strong {
+      display: block;
+      font-size: 28px;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: var(--surface);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* ── SECTION WITHIN CARD ── */
+    .form-section {
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .form-section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ── GRID ── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 20px 24px;
+    }
+
+    .span-2 { grid-column: span 2; }
+
+    /* ── FIELD ── */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    .field label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1.5px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      outline: none;
+      width: 100%;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(45,89,134,0.10);
+    }
+
+    .field input.error,
+    .field select.error,
+    .field textarea.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(139,47,47,0.10);
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .error-msg {
+      font-size: 11px;
+      color: var(--danger);
+      display: none;
+    }
+
+    .field.has-error .error-msg { display: block; }
+
+    /* ── TEXTAREA ── */
+    .field textarea {
+      resize: vertical;
+      min-height: 260px;
+      line-height: 1.7;
+    }
+
+    /* ── WORD COUNT ── */
+    .textarea-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -14px;
+      margin-bottom: 4px;
+    }
+
+    .word-count {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ── ACTION BAR ── */
+    .action-bar {
+      padding: 20px 32px;
+      background: #f8f8fb;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .action-bar-left {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .action-bar-left .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+
+    .action-bar-left .dot.saved { background: var(--green); }
+
+    .action-bar-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(45,89,134,0.25);
+    }
+
+    .btn-primary:hover {
+      background: #1e4370;
+      box-shadow: 0 4px 14px rgba(45,89,134,0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--rule);
+    }
+
+    .btn-ghost:hover {
+      background: var(--danger-dim);
+      color: var(--danger);
+      border-color: #e0b0b0;
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(30,107,74,0.25);
+    }
+
+    .btn-success:hover {
+      background: #155234;
+      box-shadow: 0 4px 14px rgba(30,107,74,0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-success:active { transform: translateY(0); }
+
+    /* ── TOAST ── */
+    .toast-container {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+    }
+
+    .toast {
+      background: var(--ink);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn 0.3s ease forwards;
+      max-width: 320px;
+    }
+
+    .toast.success { border-left: 3px solid var(--green); }
+    .toast.info    { border-left: 3px solid var(--accent); }
+    .toast.warning { border-left: 3px solid var(--gold); }
+    .toast.error   { border-left: 3px solid var(--danger); }
+
+    .toast.hide { animation: toastOut 0.3s ease forwards; }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(30px); }
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,26,46,0.55);
+      backdrop-filter: blur(3px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 32px 36px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.96);
+      transition: transform 0.2s;
+    }
+
+    .modal-overlay.open .modal { transform: scale(1); }
+
+    .modal h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      font-size: 13.5px;
+      color: var(--ink-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 16px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      header { padding: 0 20px; }
+      main { padding: 24px 16px 48px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .span-2 { grid-column: span 1; }
+      .form-section { padding: 22px 20px; }
+      .action-bar { padding: 16px 20px; }
+      .page-intro { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-brand">
+    <div class="header-logo">&#128483;</div>
+    <div class="header-title">
+      Painel Profissional – <span>Fonoaudiologia</span>
+    </div>
+  </div>
+  <div class="header-badge">Doenças Crônicas</div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <div class="page-intro">
+    <div class="page-intro-text">
+      <h1>Registro de <em>Evolução</em> Fonoaudiologia</h1>
+      <p>Preencha os dados da sessão e registre a evolução do paciente com atenção e sigilo profissional.</p>
+    </div>
+    <div class="session-counter">
+      <strong id="sessions-count">—</strong>
+      sessões salvas
+    </div>
+  </div>
+
+  <div class="form-card">
+
+    <!-- IDENTIFICAÇÃO -->
+    <div class="form-section">
+      <div class="section-label">Identificação do Atendimento</div>
+
+      <div class="grid-3">
+        <div class="field has-error" id="field-nome">
+          <label for="nome_paciente">Nome do Paciente</label>
+          <input type="text" id="nome_paciente" name="nome_paciente" placeholder="Nome completo">
+          <span class="error-msg">Campo obrigatório</span>
+        </div>
+
+        <div class="field" id="field-cpf">
+          <label for="cpf">CPF</label>
+          <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14">
+          <span class="error-msg">CPF inválido</span>
+        </div>
+
+        <div class="field" id="field-data">
+          <label for="data_hora">Data e Horário</label>
+          <input type="datetime-local" id="data_hora" name="data_hora">
+        </div>
+      </div>
+    </div>
+
+    <!-- DADOS CLÍNICOS -->
+    <div class="form-section">
+      <div class="section-label">Dados Clínicos</div>
+
+      <div class="grid-2">
+        <div class="field" id="field-tipo">
+          <label for="tipo_atendimento">Modalidade de Atendimento</label>
+          <select id="tipo_atendimento" name="tipo_atendimento">
+            <option value="">— Selecione —</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Teleatendimento">Teleatendimento</option>
+            <option value="Domiciliar">Domiciliar</option>
+            <option value="Em grupo">Em grupo</option>
+            <option value="Outro">Outro</option>
+          </select>
+          <span class="error-msg">Selecione uma modalidade</span>
+        </div>
+
+        <div class="field">
+          <label for="cid">CID-10 / Hipótese Diagnóstica</label>
+          <input type="text" id="cid" name="cid" placeholder="Ex.: F32.1 — Episódio depressivo moderado">
+        </div>
+
+        <div class="field">
+          <label for="profissional">Profissional Responsável</label>
+          <input type="text" id="profissional" name="profissional" placeholder="Nome do fonoaudiólogo responsável">
+        </div>
+
+        <div class="field">
+          <label for="coren">CFFa</label>
+          <input type="text" id="coren" name="cffa" placeholder="Ex.: 04/00000">
+        </div>
+      </div>
+    </div>
+
+    <!-- EVOLUÇÃO -->
+    <div class="form-section">
+      <div class="section-label">Resumo da Sessão / Evolução</div>
+
+      <div class="field" id="field-evolucao">
+        <label for="texto_evolucao">Narrativa clínica</label>
+        <textarea
+          id="texto_evolucao"
+          name="texto_evolucao"
+          placeholder="Descreva de forma objetiva e técnica o conteúdo abordado na sessão, a conduta adotada, as intervenções realizadas, a resposta do paciente e o encaminhamento ou plano terapêutico para os próximos atendimentos..."
+        ></textarea>
+        <span class="error-msg">Informe a evolução da sessão</span>
+      </div>
+      <div class="textarea-footer">
+        <span class="word-count" id="word-count">0 palavras</span>
+      </div>
+    </div>
+
+    <!-- ACTION BAR -->
+    <div class="action-bar">
+      <div class="action-bar-left">
+        <div class="dot" id="status-dot"></div>
+        <span id="status-text">Nenhuma alteração</span>
+      </div>
+
+      <div class="action-bar-right">
+        <button class="btn btn-ghost" id="btn-cancelar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          Cancelar
+        </button>
+
+        <button class="btn btn-success" id="btn-imprimir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Imprimir PDF
+        </button>
+
+        <button class="btn btn-primary" id="btn-salvar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Salvar Evolução
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /.form-card -->
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  &copy; 2024 Painel Profissional – Doenças Crônicas. Todos os direitos reservados.
+</footer>
+
+<!-- TOASTS -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- MODAL CANCELAR -->
+<div class="modal-overlay" id="modal-cancelar">
+  <div class="modal">
+    <h3>Cancelar preenchimento?</h3>
+    <p>Todos os dados inseridos neste formulário serão apagados. Esta ação não pode ser desfeita.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modal-cancelar-nao">Voltar ao formulário</button>
+      <button class="btn" id="modal-cancelar-sim"
+        style="background:var(--danger);color:#fff;">Confirmar cancelamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  integrity="sha512-Yk6f4cGv1iWcQKXHtZrqV0nH4/0IhZJVEmZciCw5NU3Mfcv2Hi0ON6XfJWgFWi2CSvRsStWfPMyhYJQJbK+ImA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+/* ══════════════════════════════════════════════════
+   UTILITÁRIOS
+══════════════════════════════════════════════════ */
+function showToast(msg, type = 'info', duration = 3500) {
+  const tc = document.getElementById('toast-container');
+  const icons = {
+    success: '✔',
+    info: 'ℹ',
+    warning: '⚠',
+    error: '✖'
+  };
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
+  tc.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('hide');
+    t.addEventListener('animationend', () => t.remove());
+  }, duration);
+}
+
+function setStatus(text, saved = false) {
+  document.getElementById('status-text').textContent = text;
+  const dot = document.getElementById('status-dot');
+  dot.className = 'dot' + (saved ? ' saved' : '');
+}
+
+function updateSessionCount() {
+  const keys = Object.keys(localStorage).filter(k => k.startsWith('psico_evolucao_'));
+  document.getElementById('sessions-count').textContent = keys.length;
+}
+
+/* ══════════════════════════════════════════════════
+   MÁSCARA CPF
+══════════════════════════════════════════════════ */
+document.getElementById('cpf').addEventListener('input', function () {
+  let v = this.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+  this.value = v;
+  setStatus('Não salvo — há alterações', false);
+});
+
+/* ══════════════════════════════════════════════════
+   CONTADOR DE PALAVRAS
+══════════════════════════════════════════════════ */
+document.getElementById('texto_evolucao').addEventListener('input', function () {
+  const words = this.value.trim() === '' ? 0 : this.value.trim().split(/\s+/).length;
+  document.getElementById('word-count').textContent = `${words} palavra${words !== 1 ? 's' : ''}`;
+  setStatus('Não salvo — há alterações', false);
+});
+
+/* ══════════════════════════════════════════════════
+   DATA/HORA PADRÃO
+══════════════════════════════════════════════════ */
+(function setDefaultDateTime() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const dt = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  document.getElementById('data_hora').value = dt;
+})();
+
+/* ══════════════════════════════════════════════════
+   VALIDAÇÃO
+══════════════════════════════════════════════════ */
+function getFormData() {
+  return {
+    nome:        document.getElementById('nome_paciente').value.trim(),
+    cpf:         document.getElementById('cpf').value.trim(),
+    data_hora:   document.getElementById('data_hora').value,
+    tipo:        document.getElementById('tipo_atendimento').value,
+    cid:         document.getElementById('cid').value.trim(),
+    profissional:document.getElementById('profissional').value.trim(),
+    crp:         document.getElementById('crp').value.trim(),
+    evolucao:    document.getElementById('texto_evolucao').value.trim()
+  };
+}
+
+function validateForm() {
+  const d = getFormData();
+  let ok = true;
+
+  const required = [
+    { id: 'field-nome',    val: d.nome },
+    { id: 'field-data',    val: d.data_hora },
+    { id: 'field-tipo',    val: d.tipo },
+    { id: 'field-evolucao',val: d.evolucao }
+  ];
+
+  required.forEach(({ id, val }) => {
+    const f = document.getElementById(id);
+    if (!val) { f.classList.add('has-error'); ok = false; }
+    else f.classList.remove('has-error');
+  });
+
+  return ok;
+}
+
+/* ══════════════════════════════════════════════════
+   SALVAR
+══════════════════════════════════════════════════ */
+document.getElementById('btn-salvar').addEventListener('click', () => {
+  if (!validateForm()) {
+    showToast('Preencha os campos obrigatórios.', 'warning');
+    return;
+  }
+
+  const d = getFormData();
+  const key = `psico_evolucao_${Date.now()}`;
+  localStorage.setItem(key, JSON.stringify(d));
+
+  setStatus('Salvo com sucesso', true);
+  updateSessionCount();
+  showToast('Evolução salva com sucesso!', 'success');
+});
+
+/* ══════════════════════════════════════════════════
+   CANCELAR (modal)
+══════════════════════════════════════════════════ */
+document.getElementById('btn-cancelar').addEventListener('click', () => {
+  document.getElementById('modal-cancelar').classList.add('open');
+});
+
+document.getElementById('modal-cancelar-nao').addEventListener('click', () => {
+  document.getElementById('modal-cancelar').classList.remove('open');
+});
+
+document.getElementById('modal-cancelar-sim').addEventListener('click', () => {
+  document.getElementById('modal-cancelar').classList.remove('open');
+  document.getElementById('nome_paciente').value = '';
+  document.getElementById('cpf').value = '';
+  document.getElementById('tipo_atendimento').value = '';
+  document.getElementById('cid').value = '';
+  document.getElementById('profissional').value = '';
+  document.getElementById('crp').value = '';
+  document.getElementById('texto_evolucao').value = '';
+  document.getElementById('word-count').textContent = '0 palavras';
+
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('data_hora').value =
+    `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+  ['field-nome','field-data','field-tipo','field-evolucao'].forEach(id =>
+    document.getElementById(id).classList.remove('has-error')
+  );
+
+  setStatus('Formulário limpo', false);
+  showToast('Formulário cancelado e limpo.', 'info');
+});
+
+/* ══════════════════════════════════════════════════
+   IMPRIMIR PDF – ABNT NBR 6022 / 14724
+══════════════════════════════════════════════════ */
+document.getElementById('btn-imprimir').addEventListener('click', () => {
+  if (!validateForm()) {
+    showToast('Preencha os campos obrigatórios antes de imprimir.', 'warning');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const d = getFormData();
+
+  /* Formatos ABNT: A4, margens 3cm esq/sup, 2cm dir/inf */
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const PW   = 210;   // largura A4
+  const PH   = 297;   // altura A4
+  const ML   = 30;    // margem esquerda 3 cm
+  const MR   = 20;    // margem direita  2 cm
+  const MT   = 30;    // margem superior 3 cm
+  const MB   = 20;    // margem inferior 2 cm
+  const TW   = PW - ML - MR;  // largura útil do texto
+  let   y    = MT;
+
+  /* ── helpers ── */
+  const nl = (extra = 0) => { y += 5 + extra; };
+  const checkPage = (needed = 8) => {
+    if (y + needed > PH - MB) {
+      doc.addPage();
+      y = MT;
+      drawHeader();
+    }
+  };
+
+  function drawHeader() {
+    // Linha superior decorativa
+    doc.setDrawColor(45, 89, 134);
+    doc.setLineWidth(0.6);
+    doc.line(ML, MT - 8, PW - MR, MT - 8);
+  }
+
+  function drawFooter() {
+    const pages = doc.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) {
+      doc.setPage(i);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(140);
+      doc.text(
+        'Documento de uso interno — sigiloso — sujeito ao Código de Ética Profissional do Psicólogo (CFP)',
+        PW / 2, PH - 12, { align: 'center' }
+      );
+      doc.text(`Página ${i} de ${pages}`, PW - MR, PH - 12, { align: 'right' });
+      // linha rodapé
+      doc.setDrawColor(200);
+      doc.setLineWidth(0.3);
+      doc.line(ML, PH - 16, PW - MR, PH - 16);
+    }
+  }
+
+  /* ── formatação de data ── */
+  function fmtDateTime(dtStr) {
+    if (!dtStr) return '—';
+    const dt = new Date(dtStr);
+    const d  = String(dt.getDate()).padStart(2,'0');
+    const m  = String(dt.getMonth()+1).padStart(2,'0');
+    const y  = dt.getFullYear();
+    const hh = String(dt.getHours()).padStart(2,'0');
+    const mm = String(dt.getMinutes()).padStart(2,'0');
+    return `${d}/${m}/${y}  –  ${hh}h${mm}`;
+  }
+
+  /* ── wrap text ── */
+  function writeBlock(text, fontSize, style, color, maxWidth, lineH) {
+    doc.setFont('helvetica', style);
+    doc.setFontSize(fontSize);
+    doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(text, maxWidth);
+    lines.forEach(line => {
+      checkPage(lineH + 1);
+      doc.text(line, ML, y);
+      y += lineH;
+    });
+  }
+
+  /* ── página 1 ── */
+  drawHeader();
+
+  /* Instituição */
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(80);
+  doc.text('PAINEL PROFISSIONAL — DOENÇAS CRÔNICAS', PW / 2, y, { align: 'center' });
+  nl(1);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(120);
+  doc.text('Serviço de Psicologia', PW / 2, y, { align: 'center' });
+  nl(8);
+
+  /* Título do documento */
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(26, 26, 46);
+  doc.text('REGISTRO DE EVOLUÇÃO PSICOLÓGICA', PW / 2, y, { align: 'center' });
+  nl(2);
+
+  /* Linha decorativa sob título */
+  doc.setDrawColor(176, 141, 71);
+  doc.setLineWidth(0.5);
+  const titleW = doc.getTextWidth('REGISTRO DE EVOLUÇÃO PSICOLÓGICA') + 10;
+  doc.line((PW - titleW) / 2, y, (PW + titleW) / 2, y);
+  nl(10);
+
+  /* ──── SEÇÃO 1: Identificação ──── */
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(45, 89, 134);
+  doc.text('1  IDENTIFICAÇÃO DO ATENDIMENTO', ML, y);
+  nl(1);
+  doc.setDrawColor(45, 89, 134);
+  doc.setLineWidth(0.3);
+  doc.line(ML, y, PW - MR, y);
+  nl(5);
+
+  const row = (label, value) => {
+    checkPage(7);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(80);
+    doc.text(`${label}:`, ML, y);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(26, 26, 46);
+    doc.text(value || '—', ML + 42, y);
+    y += 6.5;
+  };
+
+  row('Paciente',           d.nome);
+  row('CPF',                d.cpf || '—');
+  row('Data e Horário',     fmtDateTime(d.data_hora));
+  row('Modalidade',         d.tipo || '—');
+  row('CID-10 / Hipótese',  d.cid  || '—');
+  nl(4);
+
+  /* ──── SEÇÃO 2: Profissional ──── */
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(45, 89, 134);
+  doc.text('2  PROFISSIONAL RESPONSÁVEL', ML, y);
+  nl(1);
+  doc.setDrawColor(45, 89, 134);
+  doc.setLineWidth(0.3);
+  doc.line(ML, y, PW - MR, y);
+  nl(5);
+
+  row('Psicólogo(a)', d.profissional || '—');
+  row('CRP',          d.crp         || '—');
+  nl(4);
+
+  /* ──── SEÇÃO 3: Evolução ──── */
+  checkPage(20);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(45, 89, 134);
+  doc.text('3  NARRATIVA CLÍNICA — EVOLUÇÃO DA SESSÃO', ML, y);
+  nl(1);
+  doc.setDrawColor(45, 89, 134);
+  doc.setLineWidth(0.3);
+  doc.line(ML, y, PW - MR, y);
+  nl(7);
+
+  /* Corpo da evolução – fonte 11pt, justificado (simulado), entrelinha 6.5 */
+  writeBlock(d.evolucao, 11, 'normal', [26, 26, 46], TW, 6.5);
+  nl(12);
+
+  /* ──── SEÇÃO 4: Assinatura ──── */
+  checkPage(30);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(45, 89, 134);
+  doc.text('4  ASSINATURA E RESPONSABILIDADE', ML, y);
+  nl(1);
+  doc.setDrawColor(45, 89, 134);
+  doc.setLineWidth(0.3);
+  doc.line(ML, y, PW - MR, y);
+  nl(14);
+
+  /* Linha de assinatura */
+  const sigX = ML + TW * 0.15;
+  const sigW = TW * 0.7;
+  doc.setDrawColor(80);
+  doc.setLineWidth(0.4);
+  doc.line(sigX, y, sigX + sigW, y);
+  nl(4);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(80);
+  const profLabel = d.profissional ? `${d.profissional}${d.crp ? '  —  CRP ' + d.crp : ''}` : 'Psicólogo(a) Responsável';
+  doc.text(profLabel, PW / 2, y, { align: 'center' });
+  nl(3);
+  doc.setFontSize(8);
+  doc.setTextColor(140);
+  doc.text('Assinatura e carimbo do profissional', PW / 2, y, { align: 'center' });
+  nl(10);
+
+  /* Data de emissão */
+  const now = new Date();
+  const emissao = now.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+  doc.setFontSize(8);
+  doc.setTextColor(140);
+  doc.text(`Documento emitido em ${emissao}`, PW / 2, y, { align: 'center' });
+
+  /* Rodapé em todas as páginas */
+  drawFooter();
+
+  /* Nome do arquivo */
+  const namePart = d.nome.replace(/\s+/g, '_').toLowerCase().replace(/[^a-z0-9_]/g, '') || 'paciente';
+  const datePart = (d.data_hora || '').slice(0, 10).replace(/-/g, '') || 'sem_data';
+  doc.save(`evolucao_${namePart}_${datePart}.pdf`);
+
+  showToast('PDF gerado e salvo com sucesso!', 'success', 4000);
+});
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+updateSessionCount();
+setStatus('Aguardando preenchimento', false);
+</script>
+</body>
+</html>

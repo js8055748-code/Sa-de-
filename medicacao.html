@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medicações – Doenças Crônicas</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif
+    }
+  </style>
+  <style>
+    :root {
+      --blue-dark: #0a2540;
+      --blue-mid: #1565c0;
+      --blue-light: #4fc3f7;
+      --green: #2e7d32;
+      --green-light: #66bb6a;
+      --orange: #e65100;
+      --orange-light: #ffa726;
+      --bg: #f0f4f8;
+      --white: #fff;
+      --text: #1a2332;
+      --muted: #546e7a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: 'Nunito Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh
+    }
+
+    .site-header {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 60%, #0288d1 100%);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .role-badge {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      color: #fff;
+      font-weight: 700
+    }
+
+    .hero-strip {
+      background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+      padding: 24px 24px 28px;
+      color: #fff;
+    }
+
+    .hero-strip h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 4px
+    }
+
+    .hero-strip p {
+      font-size: 0.88rem;
+      opacity: .85
+    }
+
+    .shell {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--blue-mid);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem
+    }
+
+    .back-link:hover {
+      text-decoration: underline
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8edf3
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px
+    }
+
+    .ch-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem
+    }
+
+    .ch-icon.green {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9)
+    }
+
+    .ch-icon.blue {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb)
+    }
+
+    .ch-icon.orange {
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2)
+    }
+
+    .card-header h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--blue-dark)
+    }
+
+    /* SEARCH BAR */
+    .search-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .search-row input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #cdd5df;
+      background: #f8fafc;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color .2s;
+    }
+
+    .search-row input:focus {
+      outline: none;
+      border-color: var(--blue-mid);
+      background: #fff
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn.blue {
+      background: var(--blue-mid);
+      color: #fff
+    }
+
+    .btn.blue:hover {
+      background: var(--blue-dark)
+    }
+
+    .btn.green {
+      background: var(--green);
+      color: #fff
+    }
+
+    .btn.green:hover {
+      background: #1b5e20
+    }
+
+    .btn.sm {
+      padding: 7px 14px;
+      font-size: 0.8rem
+    }
+
+    /* FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    @media(max-width:500px) {
+      .form-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px
+    }
+
+    .field label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #cdd5df;
+      background: #f8fafc;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.88rem;
+      transition: border-color .2s;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--green);
+      background: #fff
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 64px
+    }
+
+    .field-full {
+      grid-column: 1/-1
+    }
+
+    /* MED LIST */
+    .med-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px
+    }
+
+    .med-card {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #e0e7ef;
+      border-left: 4px solid var(--green);
+      transition: box-shadow .2s;
+    }
+
+    .med-card:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1)
+    }
+
+    .med-name {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .med-badge {
+      background: var(--green-light);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase
+    }
+
+    .med-row {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 4px
+    }
+
+    .med-row strong {
+      color: var(--text);
+      font-weight: 600
+    }
+
+    .med-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px
+    }
+
+    .msg {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 10px
+    }
+
+    .msg.ok {
+      color: var(--green)
+    }
+
+    .msg.err {
+      color: #c62828
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 16px 0;
+      text-align: center
+    }
+
+    .readonly-note {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #e65100;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="index.html" class="logo">❤️ Doenças Crônicas</a>
+    <div class="role-badge" id="role-badge">Carregando…</div>
+  </header>
+
+  <div class="hero-strip">
+    <h1>💊 Medicações em Uso</h1>
+    <p id="hero-sub">Acompanhe e gerencie as medicações do paciente</p>
+  </div>
+
+  <div class="shell">
+    <a href="#" id="back-link" class="back-link">← Voltar ao painel</a>
+
+    <!-- SOMENTE LEITURA (paciente) -->
+    <div class="readonly-note" id="nota-readonly" style="display:none">
+      ⚠️ Você está em modo leitura. Apenas profissionais de saúde podem cadastrar ou editar medicações.
+    </div>
+
+    <!-- BUSCA POR PACIENTE (responsável) -->
+    <div class="card" id="card-busca" style="display:none">
+      <div class="card-header">
+        <div class="ch-icon blue">🔍</div>
+        <h2>Buscar Paciente por CPF</h2>
+      </div>
+      <div class="search-row">
+        <input type="text" id="busca-cpf" placeholder="Digite o CPF do paciente…">
+        <button class="btn blue" onclick="buscarPaciente()">Buscar</button>
+      </div>
+      <div class="msg" id="msg-busca"></div>
+      <div id="info-paciente" style="margin-top:12px;font-size:0.88rem;color:var(--muted)"></div>
+    </div>
+
+    <!-- FORMULÁRIO CADASTRO/EDIÇÃO (responsável) -->
+    <div class="card" id="card-form" style="display:none">
+      <div class="card-header">
+        <div class="ch-icon orange">✏️</div>
+        <h2 id="form-title">Cadastrar Medicação</h2>
+      </div>
+      <form id="form-med">
+        <input type="hidden" id="med-id">
+        <div class="form-grid">
+          <div class="field"><label>Nome da Medicação *</label><input type="text" id="med-nome" required
+              placeholder="Ex: Metformina 500mg"></div>
+          <div class="field"><label>Posologia (dose) *</label><input type="text" id="med-posologia" required
+              placeholder="Ex: 1 comprimido 2x ao dia"></div>
+          <div class="field"><label>Forma Farmacêutica</label><input type="text" id="med-forma"
+              placeholder="Comprimido, gotas, xarope…"></div>
+          <div class="field"><label>Intervalo de Uso</label><input type="text" id="med-intervalo"
+              placeholder="Ex: 12 em 12 horas"></div>
+          <div class="field field-full"><label>Observações</label><textarea id="med-obs"
+              placeholder="Ex: Tomar após as refeições."></textarea></div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <button type="submit" class="btn green">💾 Salvar Medicação</button>
+          <button type="button" class="btn blue sm" onclick="limparForm()">Nova Medicação</button>
+        </div>
+        <div class="msg" id="msg-med"></div>
+      </form>
+    </div>
+
+    <!-- LISTA DE MEDICAÇÕES -->
+    <div class="card">
+      <div class="card-header">
+        <div class="ch-icon green">📋</div>
+        <h2>Lista de Medicações</h2>
+      </div>
+      <div id="lista-meds">
+        <div class="empty">Nenhum paciente selecionado.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://127.0.0.1:5000';
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role') || 'responsavel';
+    const pacIdUrl = params.get('paciente_id') ? Number(params.get('paciente_id')) : null;
+
+    let pacienteAtual = null;
+    let medicacoesList = [];
+
+    // SETUP POR ROLE
+    const badge = document.getElementById('role-badge');
+    const backLink = document.getElementById('back-link');
+
+    if (role === 'paciente') {
+      badge.textContent = '👤 Paciente (leitura)';
+      backLink.href = 'paciente.html';
+      document.getElementById('nota-readonly').style.display = 'flex';
+      document.getElementById('card-busca').style.display = 'none';
+      document.getElementById('card-form').style.display = 'none';
+      document.getElementById('hero-sub').textContent = 'Veja suas medicações registradas pelo seu responsável';
+
+      // Carrega medicações pelo ID vindo da URL ou sessão
+      const sessao = JSON.parse(sessionStorage.getItem('dc_paciente') || 'null');
+      const pid = pacIdUrl || sessao?.id;
+      if (pid) {
+        carregarMeds(pid);
+      }
+    } else {
+      badge.textContent = '🩺 Profissional';
+      backLink.href = 'responsavel.html';
+      document.getElementById('card-busca').style.display = 'block';
+      document.getElementById('card-form').style.display = 'block';
+    }
+
+    // BUSCAR PACIENTE
+    async function buscarPaciente() {
+      const cpf = document.getElementById('busca-cpf').value.trim();
+      const msg = document.getElementById('msg-busca');
+      const info = document.getElementById('info-paciente');
+      msg.textContent = ''; msg.className = 'msg';
+      if (!cpf) { msg.textContent = 'Digite um CPF.'; msg.className = 'msg err'; return; }
+
+      try {
+        const resp = await fetch(`${API}/api/pacientes/${encodeURIComponent(cpf)}`);
+        if (!resp.ok) {
+          msg.textContent = 'Paciente não encontrado.';
+          msg.className = 'msg err';
+          info.textContent = '';
+          document.getElementById('lista-meds').innerHTML = '<div class="empty">Paciente não encontrado.</div>';
+          return;
+        }
+        const pac = await resp.json();
+        pacienteAtual = pac;
+        info.textContent = `✅ Paciente: ${pac.nome} — CPF: ${pac.cpf}`;
+        msg.textContent = 'Paciente encontrado!'; msg.className = 'msg ok';
+        await carregarMeds(pac.id);
+      } catch (err) {
+        msg.textContent = 'Falha na comunicação.'; msg.className = 'msg err';
+      }
+    }
+
+    // CARREGAR MEDICAÇÕES
+    async function carregarMeds(pacId) {
+      try {
+        const resp = await fetch(`${API}/api/pacientes/${pacId}/medicacoes`);
+        if (!resp.ok) { renderMeds([]); return; }
+        medicacoesList = await resp.json();
+        renderMeds(medicacoesList);
+      } catch { renderMeds([]); }
+    }
+
+    // RENDERIZAR LISTA
+    function renderMeds(lista) {
+      const el = document.getElementById('lista-meds');
+      if (!lista.length) { el.innerHTML = '<div class="empty">Nenhuma medicação cadastrada para este paciente.</div>'; return; }
+      if (role === 'paciente') {
+        el.innerHTML = `<div class="med-grid">${lista.map(m => renderMedPaciente(m)).join('')}</div>`;
+      } else {
+        el.innerHTML = `<div class="med-grid">${lista.map(m => `
+          <div class="med-card">
+            <div class="med-name">💊 ${m.nome_medicacao} <span class="med-badge">${m.em_uso ? 'Em uso' : 'Inativo'}</span></div>
+            <div class="med-row"><strong>Posologia:</strong> ${m.posologia || '–'}</div>
+            <div class="med-row"><strong>Forma:</strong> ${m.forma_farmaceutica || '–'}</div>
+            <div class="med-row"><strong>Intervalo:</strong> ${m.intervalo_uso || '–'}</div>
+            ${m.observacoes ? `<div class="med-row"><strong>Obs:</strong> ${m.observacoes}</div>` : ''}
+            <div class="med-actions"><button class="btn blue sm" onclick="editarMed(${m.id})">✏️ Editar</button></div>
+          </div>
+        `).join('')}</div>`;
+      }
+    }
+
+    // Função para renderizar medicação para o paciente com quadro de checagem
+    function renderMedPaciente(med) {
+      const horarios = med.horarios_previstos || [];
+      const historico = med.historico_tomada || [];
+      let html = `<div class="med-card">
+        <div class="med-name">💊 ${med.nome_medicacao} <span class="med-badge">${med.em_uso ? 'Em uso' : 'Inativo'}</span></div>
+        <div class="med-row"><strong>Posologia:</strong> ${med.posologia || '–'}</div>
+        <div class="med-row"><strong>Forma:</strong> ${med.forma_farmaceutica || '–'}</div>
+        <div class="med-row"><strong>Intervalo:</strong> ${med.intervalo_uso || '–'}</div>
+        ${med.observacoes ? `<div class="med-row"><strong>Obs:</strong> ${med.observacoes}</div>` : ''}
+        <div style="margin-top:10px;font-size:0.93em">
+          <strong>Tomar nos horários:</strong>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+            ${horarios.map(horario => renderCheckboxTomada(med, horario, historico)).join('')}
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <strong>Histórico de Tomadas:</strong>
+          <ul style="list-style:none;padding:0;margin:0;max-height:120px;overflow:auto">
+            ${historico.slice(-10).reverse().map(reg => renderHistoricoTomada(reg)).join('')}
+          </ul>
+        </div>
+      </div>`;
+      return html;
+    }
+
+    // Renderiza a caixinha de checagem para cada horário
+    function renderCheckboxTomada(med, horario, historico) {
+      const hoje = new Date().toISOString().slice(0, 10);
+      const previsto = `${hoje}T${horario}`;
+      const reg = historico.find(r => r.data_hora_prevista.startsWith(hoje) && r.data_hora_prevista.endsWith(horario));
+      const checked = reg && reg.data_hora_tomada ? 'checked disabled' : '';
+      return `<label style="display:flex;align-items:center;gap:8px;font-weight:600">
+        <input type="checkbox" ${checked} onchange="if(this.checked) confirmarTomada('${med.id}','${previsto}')">
+        ${horario}
+        ${checked ? `<span style='color:var(--green);font-size:0.9em'>(Tomado)</span>` : ''}
+      </label>`;
+    }
+
+    // Renderiza histórico
+    function renderHistoricoTomada(reg) {
+      if (reg.data_hora_tomada) {
+        return `<li style="color:var(--green)">✔️ ${formatarDataHora(reg.data_hora_tomada)}</li>`;
+      } else {
+        return `<li style="color:#c62828;background:#ffebee;padding:4px 8px;border-radius:6px">❗ ${formatarDataHora(reg.data_hora_prevista)} (não confirmado)</li>`;
+      }
+    }
+
+    // Formata data/hora
+    function formatarHora(dt) {
+      const d = new Date(dt);
+      return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+    function formatarDataHora(dt) {
+      const d = new Date(dt);
+      return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Confirma tomada
+    async function confirmarTomada(medId, dataHoraPrevista) {
+      try {
+        await fetch(`${API}/api/medicacoes/${medId}/confirmar_tomada`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data_hora_prevista: dataHoraPrevista })
+        });
+        await carregarMeds(pacienteAtual.id);
+      } catch { }
+    }
+
+    // ALERTA DE TOMADA (mensagem + bip triplo)
+    function agendarAlertas() {
+      if (role !== 'paciente' || !medicacoesList.length) return;
+      const agora = new Date();
+      medicacoesList.forEach(med => {
+        (med.horarios_previstos || []).forEach(horario => {
+          const hoje = new Date().toISOString().slice(0, 10);
+          const previsto = new Date(`${hoje}T${horario}`);
+          const diff = previsto - agora;
+          if (diff > 0 && diff <= 10 * 60 * 1000) {
+            // 10 minutos antes
+            setTimeout(() => emitirAlerta(med.nome_medicacao, horario), diff);
+          }
+        });
+      });
+    }
+    function emitirAlerta(nome, horario) {
+      alert(`Lembrete: Tome a medicação "${nome}" às ${horario}!`);
+      for (let i = 0; i < 3; i++) setTimeout(() => { (new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=')).play(); }, i * 500);
+    }
+    // Agendar alertas ao carregar medicações
+    if (role === 'paciente') {
+      setTimeout(agendarAlertas, 1000);
+    }
+
+    // EDITAR MED
+    function editarMed(id) {
+      const med = medicacoesList.find(m => m.id === id);
+      if (!med) return;
+      document.getElementById('med-id').value = med.id;
+      document.getElementById('med-nome').value = med.nome_medicacao || '';
+      document.getElementById('med-posologia').value = med.posologia || '';
+      document.getElementById('med-forma').value = med.forma_farmaceutica || '';
+      document.getElementById('med-intervalo').value = med.intervalo_uso || '';
+      document.getElementById('med-obs').value = med.observacoes || '';
+      document.getElementById('form-title').textContent = 'Editar Medicação';
+      document.getElementById('card-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function limparForm() {
+      document.getElementById('form-med').reset();
+      document.getElementById('med-id').value = '';
+      document.getElementById('form-title').textContent = 'Cadastrar Medicação';
+    }
+
+    // SALVAR MEDICAÇÃO
+    document.getElementById('form-med').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      if (!pacienteAtual) { alert('Selecione um paciente primeiro.'); return; }
+      const msg = document.getElementById('msg-med');
+      msg.textContent = ''; msg.className = 'msg';
+
+      const medId = document.getElementById('med-id').value;
+      const payload = {
+        nome_medicacao: document.getElementById('med-nome').value.trim(),
+        posologia: document.getElementById('med-posologia').value.trim(),
+        forma_farmaceutica: document.getElementById('med-forma').value.trim() || null,
+        intervalo_uso: document.getElementById('med-intervalo').value.trim() || null,
+        observacoes: document.getElementById('med-obs').value.trim() || null,
+        em_uso: true
+      };
+
+      try {
+        let resp;
+        if (medId) {
+          resp = await fetch(`${API}/api/medicacoes/${medId}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+          });
+        } else {
+          resp = await fetch(`${API}/api/pacientes/${pacienteAtual.id}/medicacoes`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+          });
+        }
+        const dados = await resp.json().catch(() => null);
+        if (!resp.ok) { msg.textContent = dados?.erro || 'Erro ao salvar.'; msg.className = 'msg err'; return; }
+        msg.textContent = '✅ Medicação salva com sucesso!'; msg.className = 'msg ok';
+        limparForm();
+        await carregarMeds(pacienteAtual.id);
+      } catch { msg.textContent = 'Falha na comunicação.'; msg.className = 'msg err'; }
+    });
+
+    
+
+    // ENTER na busca
+    document.getElementById('busca-cpf')?.addEventListener('keypress', e => { if (e.key === 'Enter') buscarPaciente(); });
+  </script>
+</body>
+
+</html>

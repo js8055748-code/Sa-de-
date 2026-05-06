@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso Profissional – Doenças Crônicas</title>
+  <style>body{font-family:system-ui,sans-serif}</style>
+
+  <style>
+    :root {
+      --bg:            #060c1a;
+      --surface:       rgba(255,255,255,0.045);
+      --surface-hover: rgba(255,255,255,0.08);
+      --border:        rgba(255,255,255,0.10);
+      --accent:        #38bdf8;
+      --accent2:       #34d399;
+      --danger:        #f87171;
+      --text:          #e8edf5;
+      --muted:         #7a8ba0;
+      --input-bg:      rgba(0,0,0,0.30);
+      --radius:        14px;
+      --radius-sm:     8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      /* grade sutil de fundo */
+      background-image:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(56,189,248,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(52,211,153,0.08) 0%, transparent 60%);
+    }
+
+    /* ── wrapper principal ── */
+    .wrapper {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── cabeçalho ── */
+    .page-top {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .page-top .logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .page-top h1 {
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.25;
+    }
+    .page-top p {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* ── abas ── */
+    .tabs {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 9px 12px;
+      border: none;
+      border-radius: calc(var(--radius) - 2px);
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #060c1a;
+    }
+
+    /* ── card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 28px 24px;
+      backdrop-filter: blur(14px);
+    }
+
+    /* ── campos ── */
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 5px;
+      letter-spacing: 0.03em;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+    }
+    .field input::placeholder { color: #3d4f63; }
+    .field select option { background: #0f1b2d; }
+
+    /* dois campos lado a lado */
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ── senha com toggle ── */
+    .password-wrap { position: relative; }
+    .password-wrap input { padding-right: 42px; }
+    .toggle-pass {
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1rem; padding: 0;
+      width: auto;
+      transition: color 0.18s;
+    }
+    .toggle-pass:hover { color: var(--accent); background: none; }
+
+    /* ── separador ── */
+    .divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 18px 0 16px;
+      font-size: 0.75rem; color: var(--muted);
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: var(--border);
+    }
+
+    /* ── checkbox lembrar ── */
+    .remember-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 18px; font-size: 0.83rem; color: var(--muted);
+    }
+    .remember-row input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;
+    }
+    .remember-row label { cursor: pointer; margin: 0; color: var(--muted); font-size: 0.83rem; }
+
+    /* ── botão principal ── */
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: var(--accent);
+      color: #060c1a;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── mensagem de feedback ── */
+    .msg {
+      min-height: 1.1rem;
+      margin-top: 12px;
+      font-size: 0.83rem;
+      text-align: center;
+      border-radius: var(--radius-sm);
+      padding: 0;
+      transition: all 0.2s;
+    }
+    .msg.ok  { color: var(--accent2); }
+    .msg.err { color: var(--danger); }
+    .msg.info { color: var(--accent); }
+
+    /* ── barra de força da senha ── */
+    .strength-bar {
+      height: 3px;
+      border-radius: 99px;
+      background: var(--border);
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .strength-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 99px;
+      transition: width 0.3s, background 0.3s;
+    }
+    .strength-label {
+      font-size: 0.72rem;
+      margin-top: 3px;
+      color: var(--muted);
+      min-height: 1em;
+    }
+
+    /* ── link voltar ── */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-bottom: 20px;
+      font-size: 0.83rem; color: var(--muted);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* ── dados do usuário logado (banner) ── */
+    .logged-banner {
+      display: none;
+      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52,211,153,0.25);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: var(--accent2);
+    }
+    .logged-banner strong { color: var(--text); }
+
+    @media (max-width: 500px) {
+      .field-row { grid-template-columns: 1fr; }
+      .card { padding: 20px 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="page-top">
+    <div class="logo">Doenças Crônicas · Sistema</div>
+    <h1>Área do Profissional</h1>
+    <p>Cadastre-se ou acesse sua conta para continuar</p>
+  </div>
+
+  <a href="login.html" class="back-link">← Voltar ao painel</a>
+
+  <!-- Banner quando já há sessão salva -->
+  <div class="logged-banner" id="logged-banner">
+    Bem-vindo de volta, <strong id="logged-nome"></strong>!
+    <a href="responsavel.html" style="color:var(--accent);margin-left:8px;text-decoration:none;">Acessar painel →</a>
+  </div>
+
+  <!-- ABAS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="login">Entrar</button>
+    <button class="tab-btn" data-tab="cadastro">Criar conta</button>
+  </div>
+
+  <!-- ══════════════ ABA LOGIN ══════════════ -->
+  <div class="card" id="tab-login">
+    <form id="form-login" autocomplete="on" novalidate>
+
+      <div class="field">
+        <label for="login-identificador">E-mail ou CPF</label>
+        <input type="text" id="login-identificador" name="identificador"
+               placeholder="exemplo@email.com ou 000.000.000-00"
+               autocomplete="username" required>
+      </div>
+
+      <div class="field">
+        <label for="login-senha">Senha</label>
+        <div class="password-wrap">
+          <input type="password" id="login-senha" name="senha"
+                 placeholder="Sua senha" autocomplete="current-password" required>
+          <button type="button" class="toggle-pass" data-target="login-senha">👁</button>
+        </div>
+      </div>
+
+      <div class="remember-row">
+        <input type="checkbox" id="lembrar" name="lembrar">
+        <label for="lembrar">Lembrar meus dados neste dispositivo</label>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-login">Entrar</button>
+      <div class="msg" id="msg-login"></div>
+    </form>
+  </div>
+
+  <!-- ══════════════ ABA CADASTRO ══════════════ -->
+  <div class="card" id="tab-cadastro" style="display:none;">
+    <form id="form-cadastro" autocomplete="off" novalidate>
+
+      <div class="field">
+        <label for="cad-nome">Nome completo *</label>
+        <input type="text" id="cad-nome" name="nome"
+               placeholder="Dr. João da Silva" required autocomplete="name">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="cad-nasc">Data de nascimento *</label>
+          <input type="date" id="cad-nasc" name="data_nascimento" required>
+        </div>
+        <div class="field">
+          <label for="cad-cpf">CPF *</label>
+          <input type="text" id="cad-cpf" name="cpf"
+                 placeholder="000.000.000-00" required maxlength="14">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="cad-email">E-mail *</label>
+          <input type="text" id="cad-email" name="email"
+                 placeholder="voce@email.com" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="cad-tel">Telefone</label>
+          <input type="text" id="cad-tel" name="telefone"
+                 placeholder="(37) 99999-0000" maxlength="15">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="cad-tipo">Tipo de acesso *</label>
+          <select id="cad-tipo" name="tipo_responsavel" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="medico">Médico(a)</option>
+            <option value="enfermeira">Enfermeiro(a)</option>
+            <option value="nutricionista">Nutricionista</option>
+            <option value="psicologo">Psicólogo(a)</option>
+            <option value="fisioterapeuta">Fisioterapeuta</option>
+            <option value="tec_enfermagem">Téc. Enfermagem</option>
+            <option value="fonoaudiologo">Fonoaudiólogo(a)</option>
+            <option value="terapeuta_ocupacional">Terapeuta Ocupacional</option>
+            <option value="tec_geriatria">Téc. Geriatria</option>
+            <option value="tec_odontologia">Téc. Odontologia</option>
+            <option value="familiar">Familiar / Responsável</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cad-registro">Nº de registro (CRM/COREN…)</label>
+          <input type="text" id="cad-registro" name="numero_registro"
+                 placeholder="Opcional">
+        </div>
+      </div>
+
+      <div class="divider">senha de acesso</div>
+
+      <div class="field">
+        <label for="cad-senha">Senha *</label>
+        <div class="password-wrap">
+          <input type="password" id="cad-senha" name="senha"
+                 placeholder="Mínimo 6 caracteres" required autocomplete="new-password"
+                 id="cad-senha">
+          <button type="button" class="toggle-pass" data-target="cad-senha">👁</button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+
+      <div class="field">
+        <label for="cad-senha2">Confirmar senha *</label>
+        <div class="password-wrap">
+          <input type="password" id="cad-senha2" name="senha2"
+                 placeholder="Repita a senha" required autocomplete="new-password">
+          <button type="button" class="toggle-pass" data-target="cad-senha2">👁</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-cadastro">Criar conta</button>
+      <div class="msg" id="msg-cadastro"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const API = 'http://127.0.0.1:5000';
+
+  // ── Chaves de armazenamento ──
+  const KEY_LEMBRAR  = 'dc_resp_lembrar';   // { identificador, nome, id }
+  const KEY_SESSAO   = 'dc_resp_sessao';    // sessão temporária (tab)
+
+  // ════════════════════════════════════════
+  // ABAS
+  // ════════════════════════════════════════
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      document.getElementById('tab-login').style.display    = tab === 'login'    ? '' : 'none';
+      document.getElementById('tab-cadastro').style.display = tab === 'cadastro' ? '' : 'none';
+    });
+  });
+
+  // ════════════════════════════════════════
+  // TOGGLE SENHA
+  // ════════════════════════════════════════
+  document.querySelectorAll('.toggle-pass').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const inp = document.getElementById(btn.dataset.target);
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+      btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+    });
+  });
+
+  // ════════════════════════════════════════
+  // MÁSCARA CPF
+  // ════════════════════════════════════════
+  function mascaraCpf(v) {
+    return v.replace(/\D/g,'')
+      .replace(/(\d{3})(\d)/,'$1.$2')
+      .replace(/(\d{3})(\d)/,'$1.$2')
+      .replace(/(\d{3})(\d{1,2})$/,'$1-$2')
+      .slice(0,14);
+  }
+  document.getElementById('cad-cpf').addEventListener('input', function() {
+    this.value = mascaraCpf(this.value);
+  });
+
+  // ════════════════════════════════════════
+  // FORÇA DA SENHA
+  // ════════════════════════════════════════
+  document.getElementById('cad-senha').addEventListener('input', function() {
+    const v = this.value;
+    let pts = 0;
+    if (v.length >= 6) pts++;
+    if (v.length >= 10) pts++;
+    if (/[A-Z]/.test(v)) pts++;
+    if (/[0-9]/.test(v)) pts++;
+    if (/[^a-zA-Z0-9]/.test(v)) pts++;
+
+    const fill  = document.getElementById('strength-fill');
+    const label = document.getElementById('strength-label');
+    const pct   = [0, 20, 40, 60, 80, 100][pts];
+    const cores = ['#555','#f87171','#fbbf24','#fbbf24','#34d399','#38bdf8'];
+    const nomes = ['','Muito fraca','Fraca','Razoável','Boa','Forte'];
+    fill.style.width      = pct + '%';
+    fill.style.background = cores[pts];
+    label.textContent     = nomes[pts];
+    label.style.color     = cores[pts];
+  });
+
+  // ════════════════════════════════════════
+  // VERIFICAR "LEMBRAR" AO CARREGAR
+  // ════════════════════════════════════════
+  window.addEventListener('DOMContentLoaded', () => {
+    // Verifica sessão da aba (sessionStorage) ou lembrar (localStorage)
+    const sessao  = sessionStorage.getItem(KEY_SESSAO);
+    const lembrar = localStorage.getItem(KEY_LEMBRAR);
+    const dados   = sessao ? JSON.parse(sessao) : (lembrar ? JSON.parse(lembrar) : null);
+
+    if (dados) {
+      document.getElementById('logged-banner').style.display = 'block';
+      document.getElementById('logged-nome').textContent = dados.nome;
+
+      // Preenche campo de login automaticamente
+      if (dados.identificador) {
+        document.getElementById('login-identificador').value = dados.identificador;
+        document.getElementById('lembrar').checked = !!lembrar;
+      }
+    }
+  });
+
+  // ════════════════════════════════════════
+  // LOGIN
+  // ════════════════════════════════════════
+  document.getElementById('form-login').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const msg  = document.getElementById('msg-login');
+    const btn  = document.getElementById('btn-login');
+    msg.className = 'msg';
+    msg.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Verificando…';
+
+    const identificador = document.getElementById('login-identificador').value.trim();
+    const senha         = document.getElementById('login-senha').value;
+    const lembrar       = document.getElementById('lembrar').checked;
+
+    if (!identificador || !senha) {
+      msg.textContent = 'Preencha e-mail/CPF e senha.';
+      msg.className = 'msg err';
+      btn.disabled = false; btn.textContent = 'Entrar';
+      return;
+    }
+
+    try {
+      const resp  = await fetch(`${API}/api/responsaveis/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identificador, senha })
+      });
+      const dados = await resp.json().catch(() => null);
+
+      if (!resp.ok) {
+        msg.textContent = (dados && dados.erro) ? dados.erro : 'E-mail/CPF ou senha incorretos.';
+        msg.className = 'msg err';
+        btn.disabled = false; btn.textContent = 'Entrar';
+        return;
+      }
+
+      // Limpa sessão de paciente anterior e guarda sessão de profissional
+      sessionStorage.removeItem('dc_paciente');
+      const sessaoObj = { id: dados.responsavel.id, nome: dados.responsavel.nome, identificador };
+      sessionStorage.setItem(KEY_SESSAO, JSON.stringify(sessaoObj));
+      // Salva também no formato lido por responsavel.html
+      sessionStorage.setItem('dc_responsavel', JSON.stringify({
+        id: dados.responsavel.id,
+        nome: dados.responsavel.nome,
+        email: dados.responsavel.email || identificador,
+        tipo_responsavel: dados.responsavel.tipo_responsavel || ''
+      }));
+
+      if (lembrar) {
+        localStorage.setItem(KEY_LEMBRAR, JSON.stringify(sessaoObj));
+      } else {
+        localStorage.removeItem(KEY_LEMBRAR);
+      }
+
+      msg.textContent = `Bem-vindo(a), ${dados.responsavel.nome}! Redirecionando…`;
+      msg.className = 'msg ok';
+      setTimeout(() => { window.location.href = 'responsavel.html'; }, 1200);
+
+    } catch(err) {
+      console.error(err);
+      msg.textContent = 'Falha na comunicação com o servidor.';
+      msg.className = 'msg err';
+      btn.disabled = false; btn.textContent = 'Entrar';
+    }
+  });
+
+  // ════════════════════════════════════════
+  // CADASTRO
+  // ════════════════════════════════════════
+  document.getElementById('form-cadastro').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const msg = document.getElementById('msg-cadastro');
+    const btn = document.getElementById('btn-cadastro');
+    msg.className = 'msg'; msg.textContent = '';
+    btn.disabled = true; btn.textContent = 'Cadastrando…';
+
+    const nome            = document.getElementById('cad-nome').value.trim();
+    const data_nascimento = document.getElementById('cad-nasc').value;
+    const cpf             = document.getElementById('cad-cpf').value.trim();
+    const email           = document.getElementById('cad-email').value.trim();
+    const telefone        = document.getElementById('cad-tel').value.trim();
+    const tipo_responsavel= document.getElementById('cad-tipo').value;
+    const numero_registro = document.getElementById('cad-registro').value.trim();
+    const senha           = document.getElementById('cad-senha').value;
+    const senha2          = document.getElementById('cad-senha2').value;
+
+    // Validações front-end
+    if (!nome || !data_nascimento || !cpf || !email || !tipo_responsavel || !senha) {
+      msg.textContent = 'Preencha todos os campos obrigatórios (*).';
+      msg.className = 'msg err'; btn.disabled = false; btn.textContent = 'Criar conta'; return;
+    }
+    if (senha.length < 6) {
+      msg.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+      msg.className = 'msg err'; btn.disabled = false; btn.textContent = 'Criar conta'; return;
+    }
+    if (senha !== senha2) {
+      msg.textContent = 'As senhas não coincidem.';
+      msg.className = 'msg err'; btn.disabled = false; btn.textContent = 'Criar conta'; return;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      msg.textContent = 'Informe um e-mail válido.';
+      msg.className = 'msg err'; btn.disabled = false; btn.textContent = 'Criar conta'; return;
+    }
+
+    try {
+      const resp  = await fetch(`${API}/api/responsaveis`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, data_nascimento, cpf, email, telefone,
+                               tipo_responsavel, numero_registro, senha })
+      });
+      const dados = await resp.json().catch(() => null);
+
+      if (!resp.ok) {
+        msg.textContent = (dados && dados.erro) ? dados.erro : 'Erro ao cadastrar.';
+        msg.className = 'msg err'; btn.disabled = false; btn.textContent = 'Criar conta'; return;
+      }
+
+      msg.textContent = 'Conta criada com sucesso! Faça login para continuar.';
+      msg.className = 'msg ok';
+      this.reset();
+      document.getElementById('strength-fill').style.width = '0';
+      document.getElementById('strength-label').textContent = '';
+
+      // Vai para aba de login após 1.5s
+      setTimeout(() => {
+        document.querySelector('[data-tab="login"]').click();
+        document.getElementById('login-identificador').value = email || cpf;
+      }, 1500);
+
+    } catch(err) {
+      console.error(err);
+      msg.textContent = 'Falha na comunicação com o servidor.';
+      msg.className = 'msg err';
+    }
+    btn.disabled = false; btn.textContent = 'Criar conta';
+  });
+</script>
+</body>
+</html>

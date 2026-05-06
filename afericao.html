@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aferição – Doenças Crônicas</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif
+    }
+  </style>
+  <style>
+    :root {
+      --blue-dark: #0a2540;
+      --blue-mid: #1565c0;
+      --blue-light: #4fc3f7;
+      --green: #2e7d32;
+      --green-light: #66bb6a;
+      --orange: #e65100;
+      --orange-light: #ffa726;
+      --red: #c62828;
+      --bg: #f0f4f8;
+      --white: #ffffff;
+      --text: #1a2332;
+      --muted: #546e7a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: 'Nunito Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh
+    }
+
+    .site-header {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 60%, #0288d1 100%);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .hero-strip {
+      background: linear-gradient(135deg, #1565c0 0%, #0288d1 100%);
+      padding: 24px 24px 28px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .hero-strip h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 4px
+    }
+
+    .hero-strip p {
+      font-size: 0.88rem;
+      opacity: .85
+    }
+
+    .shell {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 28px 20px 48px
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--blue-mid);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 20px
+    }
+
+    .back-link:hover {
+      text-decoration: underline
+    }
+
+    /* STATUS CARD */
+    .status-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8edf3;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .status-orb {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #e0e7ef;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      transition: background .4s, box-shadow .4s;
+      box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .status-orb.normal {
+      background: #e8f5e9;
+      box-shadow: 0 0 0 6px rgba(46, 125, 50, .15)
+    }
+
+    .status-orb.alerta {
+      background: #fff8e1;
+      box-shadow: 0 0 0 6px rgba(255, 167, 38, .2)
+    }
+
+    .status-orb.critico {
+      background: #ffebee;
+      box-shadow: 0 0 0 6px rgba(198, 40, 40, .2)
+    }
+
+    .status-label {
+      font-size: 1.1rem;
+      font-weight: 800;
+      font-family: 'Nunito', sans-serif;
+      color: var(--text)
+    }
+
+    .status-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 4px
+    }
+
+    /* FORM CARD */
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 28px;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8edf3
+    }
+
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--blue-light)
+    }
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px
+    }
+
+    @media(max-width:520px) {
+      .fields-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px
+    }
+
+    .field label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .field input {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #cdd5df;
+      background: #f8fafc;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--blue-mid);
+      box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+      background: #fff
+    }
+
+    .field input[readonly] {
+      background: #f0f4f8;
+      color: var(--muted);
+      cursor: not-allowed
+    }
+
+    .field .unit {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    /* PA group */
+    .pa-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .pa-wrap input {
+      flex: 1
+    }
+
+    .pa-sep {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--muted)
+    }
+
+    .field-full {
+      grid-column: 1/-1
+    }
+
+    .btn-submit {
+      margin-top: 24px;
+      width: 100%;
+      padding: 13px;
+      border-radius: 999px;
+      border: none;
+      background: var(--blue-mid);
+      color: #fff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn-submit:hover {
+      background: var(--blue-dark)
+    }
+
+    .btn-submit:active {
+      transform: scale(.98)
+    }
+
+    .msg {
+      margin-top: 12px;
+      font-size: 0.87rem;
+      min-height: 1.2rem;
+      text-align: center;
+      font-weight: 600
+    }
+
+    .msg.ok {
+      color: var(--green)
+    }
+
+    .msg.err {
+      color: var(--red)
+    }
+
+    /* LEGENDA */
+    .legenda {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      background: #fff;
+      border: 1px solid #e0e7ef;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+
+    .legenda-title {
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--blue-dark)
+    }
+
+    .leg-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px
+    }
+
+    .leg-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      flex-shrink: 0
+    }
+
+    .leg-dot.normal {
+      background: var(--green-light)
+    }
+
+    .leg-dot.alerta {
+      background: var(--orange-light)
+    }
+
+    .leg-dot.critico {
+      background: var(--red)
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="paciente.html" class="logo">❤️ Doenças Crônicas</a>
+  </header>
+
+  <div class="hero-strip">
+    <h1>🩺 Aferição dos Sinais Vitais</h1>
+    <p>Registre seus dados para monitoramento contínuo da sua saúde</p>
+  </div>
+
+  <div class="shell">
+    <a href="#" class="back-link" id="back-link">← Voltar ao painel</a>
+
+    <!-- STATUS GERAL -->
+    <div class="status-card">
+      <div class="status-orb" id="status-orb">❓</div>
+      <div>
+        <div class="status-label" id="status-label">Aguardando dados</div>
+        <div class="status-sub" id="status-sub">Preencha os campos abaixo para ver o status</div>
+      </div>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <div class="section-title">📝 Registrar Nova Aferição</div>
+      <form id="form-afericao">
+        <div class="fields-grid">
+
+          <div class="field field-full">
+            <label>Data e Hora</label>
+            <input type="datetime-local" id="dataHora" readonly>
+          </div>
+
+          <div class="field field-full">
+            <label>Pressão Arterial (mmHg)</label>
+            <div class="pa-wrap">
+              <input type="number" id="pa_sistolica" placeholder="Sistólica" min="50" max="300" required>
+              <span class="pa-sep">/</span>
+              <input type="number" id="pa_diastolica" placeholder="Diastólica" min="30" max="200" required>
+            </div>
+            <div class="unit">Sistólica / Diastólica mmHg</div>
+          </div>
+
+          <div class="field">
+            <label>Frequência Cardíaca</label>
+            <input type="number" id="frequencia_cardiaca" placeholder="Ex: 75" min="30" max="250" required>
+            <div class="unit">bpm</div>
+          </div>
+
+          <div class="field">
+            <label>Temperatura Corporal</label>
+            <input type="number" id="temperatura" placeholder="Ex: 36.5" step="0.1" min="34" max="42" required>
+            <div class="unit">°C</div>
+          </div>
+
+          <div class="field">
+            <label>Glicemia Capilar</label>
+            <input type="number" id="glicemia" placeholder="Ex: 100" min="20" max="600" required>
+            <div class="unit">mg/dL</div>
+          </div>
+
+          <div class="field">
+            <label>Saturação do Sangue (SpO₂)</label>
+            <input type="number" id="saturacao" placeholder="Ex: 97" min="0" max="100" required>
+            <div class="unit">%</div>
+          </div>
+
+          <div class="field field-full" id="campo-paciente-id">
+            <label>ID do Paciente (opcional)</label>
+            <input type="number" id="paciente_id" placeholder="Deixe em branco se não souber">
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn-submit">💾 Salvar Aferição</button>
+        <div class="msg" id="msg"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- HISTÓRICO DAS AFERIÇÕES -->
+  <div class="form-card">
+    <div class="section-title">📊 Histórico das Aferições (últimos 30 dias)</div>
+    <div id="historico-afericoes">Carregando histórico...</div>
+  </div>
+
+  <!-- LEGENDA FIXA -->
+  <div class="legenda">
+    <div class="legenda-title">Legenda de Status</div>
+    <div class="leg-item">
+      <div class="leg-dot normal"></div> Normal
+    </div>
+    <div class="leg-item">
+      <div class="leg-dot alerta"></div> Alerta
+    </div>
+    <div class="leg-item">
+      <div class="leg-dot critico"></div> Crítico
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://127.0.0.1:5000';
+
+    // Preenche data/hora automaticamente com hora LOCAL do sistema operacional
+    function preencherDataHora() {
+      const agora = new Date();
+      // Ajuste para timezone local
+      const offset = agora.getTimezoneOffset() * 60000;
+      const local = new Date(agora.getTime() - offset);
+      document.getElementById('dataHora').value = local.toISOString().slice(0, 16);
+    }
+    preencherDataHora();
+    // Atualiza a cada minuto
+    setInterval(preencherDataHora, 60000);
+
+    // Back link condicional por perfil de sessão
+    (function () {
+      const link = document.getElementById('back-link');
+      if (sessionStorage.getItem('dc_paciente')) {
+        link.href = 'paciente.html';
+      } else if (sessionStorage.getItem('dc_responsavel')) {
+        link.href = 'responsavel.html';
+      }
+    })();
+
+    // Pré-preenche ID do paciente se vier da sessão
+    const paciente = JSON.parse(sessionStorage.getItem('dc_paciente') || 'null');
+    if (paciente?.id) {
+      document.getElementById('paciente_id').value = paciente.id;
+      document.getElementById('campo-paciente-id').style.display = 'none';
+    }
+
+    // CALCULA STATUS EM TEMPO REAL
+    function calcularStatus() {
+      const paSis = Number(document.getElementById('pa_sistolica').value);
+      const paDia = Number(document.getElementById('pa_diastolica').value);
+      const fc = Number(document.getElementById('frequencia_cardiaca').value);
+      const temp = Number(document.getElementById('temperatura').value);
+      const glic = Number(document.getElementById('glicemia').value);
+      const spo2 = Number(document.getElementById('saturacao').value);
+
+      const orb = document.getElementById('status-orb');
+      const label = document.getElementById('status-label');
+      const sub = document.getElementById('status-sub');
+
+      if (!paSis && !paDia && !fc && !temp && !glic && !spo2) {
+        orb.className = 'status-orb';
+        orb.textContent = '❓';
+        label.textContent = 'Aguardando dados';
+        sub.textContent = 'Preencha os campos para ver o status';
+        return;
+      }
+
+      let critico = false, alerta = false;
+      const problemas = [];
+
+      // Pressão Arterial
+      if (paSis) {
+        if (paSis >= 180 || (paDia && paDia >= 120) || paSis <= 80) { critico = true; problemas.push('PA crítica'); }
+        else if (paSis >= 140 || (paDia && paDia >= 90)) { alerta = true; problemas.push('PA elevada'); }
+      }
+
+      // Frequência Cardíaca
+      if (fc) {
+        if (fc < 50 || fc > 130) { critico = true; problemas.push('FC crítica'); }
+        else if (fc < 60 || fc > 100) { alerta = true; problemas.push('FC alterada'); }
+      }
+
+      // Temperatura
+      if (temp) {
+        if (temp < 35 || temp >= 39.5) { critico = true; problemas.push('Temp. crítica'); }
+        else if (temp >= 37.8) { alerta = true; problemas.push('Febre'); }
+      }
+
+      // Glicemia
+      if (glic) {
+        if (glic < 50 || glic > 300) { critico = true; problemas.push('Glicemia crítica'); }
+        else if (glic < 70 || glic > 180) { alerta = true; problemas.push('Glicemia alterada'); }
+      }
+
+      // SpO2
+      if (spo2) {
+        if (spo2 < 90) { critico = true; problemas.push('SpO₂ crítica'); }
+        else if (spo2 < 95) { alerta = true; problemas.push('SpO₂ baixa'); }
+      }
+
+      if (critico) {
+        orb.className = 'status-orb critico';
+        orb.textContent = '🔴';
+        label.textContent = 'Status Crítico';
+        sub.textContent = problemas.join(' · ') || 'Atenção imediata recomendada';
+      } else if (alerta) {
+        orb.className = 'status-orb alerta';
+        orb.textContent = '🟡';
+        label.textContent = 'Status de Alerta';
+        sub.textContent = problemas.join(' · ') || 'Monitore com atenção';
+      } else {
+        orb.className = 'status-orb normal';
+        orb.textContent = '🟢';
+        label.textContent = 'Status Normal';
+        sub.textContent = 'Todos os parâmetros dentro do esperado';
+      }
+    }
+
+    ['pa_sistolica', 'pa_diastolica', 'frequencia_cardiaca', 'temperatura', 'glicemia', 'saturacao']
+      .forEach(id => document.getElementById(id).addEventListener('input', calcularStatus));
+
+    // SUBMETE AFERIÇÃO
+    document.getElementById('form-afericao').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      msg.textContent = ''; msg.className = 'msg';
+
+      const payload = {
+        paciente_id: document.getElementById('paciente_id').value ? Number(document.getElementById('paciente_id').value) : null,
+        data_hora: document.getElementById('dataHora').value,
+        pa_sistolica: Number(document.getElementById('pa_sistolica').value) || null,
+        pa_diastolica: Number(document.getElementById('pa_diastolica').value) || null,
+        frequencia_cardiaca: Number(document.getElementById('frequencia_cardiaca').value) || null,
+        temperatura: Number(document.getElementById('temperatura').value) || null,
+        glicemia: Number(document.getElementById('glicemia').value) || null,
+        saturacao: Number(document.getElementById('saturacao').value) || null,
+        observacoes: null
+      };
+
+      try {
+        const resp = await fetch(`${API}/api/afericoes`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const dados = await resp.json().catch(() => null);
+        if (!resp.ok) {
+          msg.textContent = dados?.erro || 'Erro ao registrar aferição.';
+          msg.className = 'msg err'; return;
+        }
+        msg.textContent = '✅ Aferição registrada com sucesso!';
+        msg.className = 'msg ok';
+        // Atualiza data/hora para próxima aferição
+        preencherDataHora();
+      } catch (err) {
+        msg.textContent = 'Falha na comunicação com o servidor. Verifique se a API está rodando.';
+        msg.className = 'msg err';
+      }
+    });
+
+    // Função para buscar e exibir o histórico das aferições dos últimos 30 dias
+    async function carregarHistoricoAfericoes() {
+      const historicoDiv = document.getElementById('historico-afericoes');
+      historicoDiv.textContent = 'Carregando histórico...';
+      let pacienteId = document.getElementById('paciente_id').value || null;
+      if (!pacienteId && paciente?.id) pacienteId = paciente.id;
+      if (!pacienteId) {
+        historicoDiv.innerHTML = '<em>Informe ou selecione um paciente para ver o histórico.</em>';
+        return;
+      }
+      const hoje = new Date();
+      const trintaDiasAtras = new Date(hoje.getTime() - 29 * 24 * 60 * 60 * 1000);
+      const dataInicio = trintaDiasAtras.toISOString().slice(0, 10);
+      const dataFim = hoje.toISOString().slice(0, 10);
+      try {
+        const resp = await fetch(`${API}/api/afericoes?paciente_id=${pacienteId}&data_inicio=${dataInicio}&data_fim=${dataFim}`);
+        const afericoes = await resp.json();
+        if (!Array.isArray(afericoes) || afericoes.length === 0) {
+          historicoDiv.innerHTML = '<em>Nenhuma aferição registrada nos últimos 30 dias.</em>';
+          return;
+        }
+        let tabela = `<table style="width:100%;border-collapse:collapse;font-size:0.97em;">
+          <thead><tr style="background:#f0f4f8;"><th>Data</th><th>Hora</th><th>PA</th><th>FC</th><th>Temp</th><th>Glicemia</th><th>SpO₂</th></tr></thead><tbody>`;
+        afericoes.forEach(afer => {
+          const dataHora = new Date(afer.data_hora);
+          const data = dataHora.toLocaleDateString('pt-BR');
+          const hora = dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          tabela += `<tr style="border-bottom:1px solid #e0e7ef;">
+            <td>${data}</td>
+            <td>${hora}</td>
+            <td>${afer.pa_sistolica || '-'} / ${afer.pa_diastolica || '-'}</td>
+            <td>${afer.frequencia_cardiaca || '-'}</td>
+            <td>${afer.temperatura || '-'}</td>
+            <td>${afer.glicemia || '-'}</td>
+            <td>${afer.saturacao || '-'}</td>
+          </tr>`;
+        });
+        tabela += '</tbody></table>';
+        historicoDiv.innerHTML = tabela;
+      } catch (err) {
+        historicoDiv.innerHTML = '<span style="color:#c62828">Erro ao carregar histórico.</span>';
+      }
+    }
+
+    // Carrega histórico ao abrir a página e após salvar aferição
+    document.addEventListener('DOMContentLoaded', carregarHistoricoAfericoes);
+    document.getElementById('form-afericao').addEventListener('submit', function() {
+      setTimeout(carregarHistoricoAfericoes, 800);
+    });
+    document.getElementById('paciente_id').addEventListener('input', carregarHistoricoAfericoes);
+  </script>
+</body>
+</html>

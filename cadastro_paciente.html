@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Paciente – Doenças Crônicas</title>
+  <style>body{font-family:system-ui,sans-serif}</style>
+  <style>
+    :root{
+      --blue-dark:#0a2540;--blue-mid:#1565c0;--blue-light:#4fc3f7;
+      --green:#2e7d32;--green-light:#66bb6a;
+      --bg:#f0f4f8;--white:#fff;--text:#1a2332;--muted:#546e7a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    .site-header{
+      background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue-mid) 60%,#0288d1 100%);
+      padding:0 24px;display:flex;align-items:center;height:64px;box-shadow:0 2px 12px rgba(0,0,0,0.25);
+    }
+    .logo{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+    .hero-strip{background:linear-gradient(135deg,var(--green) 0%,#388e3c 100%);padding:24px;color:#fff;text-align:center}
+    .hero-strip h1{font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:800}
+    .shell{max-width:640px;margin:0 auto;padding:32px 20px 48px}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue-mid);text-decoration:none;font-weight:700;font-size:0.88rem;margin-bottom:20px}
+    .back-link:hover{text-decoration:underline}
+    .card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,0.08);border:1px solid #e8edf3}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+    .field{display:flex;flex-direction:column;gap:5px}
+    .field label{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+    .field input,.field select{
+      padding:10px 14px;border-radius:10px;border:1.5px solid #cdd5df;background:#f8fafc;
+      color:var(--text);font-family:inherit;font-size:0.9rem;transition:border-color .2s;
+    }
+    .field input:focus,.field select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(46,125,50,.1);background:#fff}
+    .field select option{background:#fff}
+    .field-full{grid-column:1/-1}
+    .btn{
+      padding:12px 28px;border-radius:999px;border:none;font-family:'Nunito',sans-serif;
+      font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;margin-top:8px;
+    }
+    .btn.green{background:var(--green);color:#fff}
+    .btn.green:hover{background:#1b5e20}
+    .msg{font-size:0.87rem;font-weight:600;margin-top:12px;min-height:1rem}
+    .msg.ok{color:var(--green)}
+    .msg.err{color:#c62828}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="logo">❤️ Doenças Crônicas</a>
+  </header>
+  <div class="hero-strip"><h1>➕ Cadastro de Paciente</h1></div>
+  <div class="shell">
+    <a href="responsavel.html" class="back-link">← Voltar ao painel</a>
+    <div class="card">
+      <form id="form-paciente">
+        <div class="form-grid">
+          <div class="field field-full"><label>Nome Completo *</label><input type="text" name="nome" required placeholder="Nome completo do paciente"></div>
+          <div class="field"><label>Data de Nascimento *</label><input type="date" name="data_nascimento" required></div>
+          <div class="field"><label>CPF *</label><input type="text" name="cpf" required placeholder="000.000.000-00"></div>
+          <div class="field"><label>Telefone</label><input type="text" name="telefone" placeholder="(37) 99999-9999"></div>
+          <div class="field field-full"><label>Endereço</label><input type="text" name="endereco" placeholder="Rua, número, bairro, cidade"></div>
+          <div class="field">
+            <label>Sexo *</label>
+            <select name="sexo" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="masculino">Masculino</option>
+              <option value="feminino">Feminino</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Condição *</label>
+            <select name="condicao" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="diabetes">Diabetes</option>
+              <option value="hipertensao">Hipertensão</option>
+              <option value="obesidade">Obesidade</option>
+              <option value="doenca_cardiaca">Doença Cardíaca</option>
+              <option value="doenca_renal">Doença Renal</option>
+              <option value="doenca_pulmonar">Doença Pulmonar</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Profissional Responsável *</label>
+            <select name="profissional_responsavel" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="medico">Médico</option>
+              <option value="nutricionista">Nutricionista</option>
+              <option value="psicologo">Psicólogo</option>
+              <option value="fisioterapeuta">Fisioterapeuta</option>
+              <option value="enfermeira">Enfermeira</option>
+              <option value="familiar">Familiar</option>
+            </select>
+          </div>
+          <div class="field"><label>Nome do Profissional *</label><input type="text" name="profissional_responsavel_nome" required placeholder="Nome completo"></div>
+        </div>
+        <button type="submit" class="btn green">✅ Cadastrar Paciente</button>
+        <div class="msg" id="msg"></div>
+      </form>
+    </div>
+  </div>
+  <script>
+    const API='http://127.0.0.1:5000';
+
+    // Verifica sessão de responsável
+    const responsavel = JSON.parse(sessionStorage.getItem('dc_responsavel') || 'null');
+    if (!responsavel) {
+      window.location.href = 'login.html?perfil=profissional';
+    }
+
+    document.getElementById('form-paciente').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const msg=document.getElementById('msg');
+      msg.textContent=''; msg.className='msg';
+      const fd=new FormData(this);
+      const payload=Object.fromEntries(fd.entries());
+      try{
+        const resp=await fetch(`${API}/api/pacientes`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+        const dados=await resp.json().catch(()=>null);
+        if(!resp.ok){msg.textContent=dados?.erro||'Erro ao cadastrar.';msg.className='msg err';return;}
+        msg.textContent=dados.mensagem||'Paciente cadastrado com sucesso!';msg.className='msg ok';
+        this.reset();
+      }catch(err){
+        msg.textContent='Falha na comunicação com o servidor.';msg.className='msg err';
+      }
+    });
+  </script>
+</body>
+</html>

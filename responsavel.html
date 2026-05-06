@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Profissional – Doenças Crônicas</title>
+  <style>body{font-family:system-ui,sans-serif}</style>
+  <style>
+    :root{
+      --blue-dark:#0a2540;--blue-mid:#1565c0;--blue-light:#4fc3f7;
+      --green:#2e7d32;--green-light:#66bb6a;
+      --orange:#e65100;--orange-light:#ffa726;
+      --bg:#f0f4f8;--white:#fff;--text:#1a2332;--muted:#546e7a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    .site-header{
+      background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue-mid) 60%,#0288d1 100%);
+      padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;
+      box-shadow:0 2px 12px rgba(0,0,0,0.25);
+    }
+    .logo{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+    .header-right{display:flex;align-items:center;gap:12px}
+    .user-pill{background:rgba(255,255,255,0.15);border-radius:999px;padding:5px 14px;font-size:0.82rem;color:#fff;font-weight:600}
+    .logout-btn-h{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 14px;font-size:0.8rem;color:#fff;cursor:pointer;font-weight:600;transition:background .2s}
+    .logout-btn-h:hover{background:rgba(255,255,255,0.22)}
+
+    .hero-strip{
+      background:linear-gradient(135deg,var(--green) 0%,#388e3c 100%);
+      padding:28px 24px;color:#fff;
+    }
+    .hero-strip h1{font-family:'Nunito',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:4px}
+    .hero-strip p{font-size:0.9rem;opacity:.85}
+
+    .shell{max-width:1040px;margin:0 auto;padding:28px 24px 48px;display:flex;gap:24px}
+    @media(max-width:820px){.shell{flex-direction:column}}
+
+    /* SIDEBAR */
+    .sidebar{width:190px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+    @media(max-width:820px){.sidebar{width:100%;flex-direction:row;flex-wrap:wrap}}
+    .nav-item{
+      display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-radius:12px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.07);text-decoration:none;color:var(--text);font-weight:600;font-size:0.88rem;
+      border-left:4px solid transparent;transition:all .2s;cursor:pointer;border-top:none;border-right:none;border-bottom:none;font-family:inherit;
+    }
+    .nav-item:hover{border-left-color:var(--green);color:var(--green);transform:translateX(2px)}
+    .nav-item .ni{font-size:1.2rem}
+    @media(max-width:820px){.nav-item{flex:1;min-width:100px;justify-content:center;border-left:none;border-bottom:3px solid transparent;padding:10px}}
+    @media(max-width:820px){.nav-item:hover{border-bottom-color:var(--green);border-left:none;transform:none}}
+
+    /* CONTENT */
+    .content{flex:1;display:flex;flex-direction:column;gap:20px}
+
+    .card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 16px rgba(0,0,0,0.08);border:1px solid #e8edf3}
+    .card-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+    .ch-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+    .ch-icon.blue{background:linear-gradient(135deg,#e3f2fd,#bbdefb)}
+    .ch-icon.green{background:linear-gradient(135deg,#e8f5e9,#c8e6c9)}
+    .ch-icon.orange{background:linear-gradient(135deg,#fff3e0,#ffe0b2)}
+    .ch-icon.purple{background:linear-gradient(135deg,#f3e5f5,#e1bee7)}
+    .card-header h2{font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;color:var(--blue-dark)}
+
+    /* SEARCH */
+    .search-row{display:flex;gap:10px;flex-wrap:wrap}
+    .search-row input{
+      flex:1;min-width:200px;padding:11px 16px;border-radius:10px;
+      border:1.5px solid #cdd5df;background:#f8fafc;color:var(--text);
+      font-family:inherit;font-size:0.92rem;transition:border-color .2s;
+    }
+    .search-row input:focus{outline:none;border-color:var(--blue-mid);background:#fff}
+    .btn{
+      padding:10px 20px;border-radius:999px;border:none;font-family:'Nunito',sans-serif;
+      font-size:0.88rem;font-weight:800;cursor:pointer;transition:all .2s;
+    }
+    .btn.blue{background:var(--blue-mid);color:#fff}
+    .btn.blue:hover{background:var(--blue-dark)}
+    .btn.green{background:var(--green);color:#fff}
+    .btn.green:hover{background:#1b5e20}
+    .btn.orange{background:var(--orange-light);color:#fff}
+    .btn.orange:hover{background:var(--orange)}
+
+    /* PATIENT INFO GRID */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:500px){.info-grid{grid-template-columns:1fr}}
+    .info-item label{display:block;font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+    .info-item span{font-size:0.92rem;font-weight:600;color:var(--text)}
+
+    /* FORM CADASTRO */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+    .field{display:flex;flex-direction:column;gap:5px}
+    .field label{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+    .field input,.field select,.field textarea{
+      padding:9px 12px;border-radius:10px;border:1.5px solid #cdd5df;background:#f8fafc;
+      color:var(--text);font-family:inherit;font-size:0.88rem;transition:border-color .2s;
+    }
+    .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green);background:#fff}
+    .field select option{background:#fff}
+    .field-full{grid-column:1/-1}
+    .field textarea{min-height:140px;resize:vertical;line-height:1.6;font-family:inherit}
+
+    .msg{font-size:0.85rem;font-weight:600;margin-top:10px}
+    .msg.ok{color:var(--green)}
+    .msg.err{color:#c62828}
+
+    /* PACIENTE BADGE */
+    .paciente-badge{
+      background:linear-gradient(135deg,#e3f2fd,#bbdefb);
+      border-left:4px solid var(--blue-mid);
+      padding:12px 16px;
+      border-radius:10px;
+      margin-bottom:20px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .paciente-badge-icon{font-size:1.5rem}
+    .paciente-badge-info strong{display:block;font-size:0.95rem;color:var(--blue-dark)}
+    .paciente-badge-info span{font-size:0.8rem;color:var(--muted)}
+
+    footer{text-align:center;padding:20px;font-size:0.8rem;color:var(--muted);background:#fff;border-top:1px solid #e0e7ef;margin-top:20px}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="logo">❤️ Doenças Crônicas</a>
+    <div class="header-right">
+      <div class="user-pill" id="user-pill">Profissional</div>
+      <button class="logout-btn-h" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <div class="hero-strip">
+    <h1 id="hero-name">Bem-vindo(a) !</h1>
+    <p>Gerencie pacientes, medicações e acompanhe indicadores de saúde.</p>
+  </div>
+
+  <div class="shell">
+    <nav class="sidebar">
+      <button class="nav-item" onclick="toggleCadastro()"><span class="ni">➕</span> Cadastrar</button>
+      <a href="medicacao.html?role=responsavel" class="nav-item"><span class="ni">💊</span> Medicações</a>
+      <a href="afericao.html" class="nav-item"><span class="ni">🩺</span> Aferição</a>
+      <a href="unidades.html" class="nav-item"><span class="ni">🏥</span> Unidades</a>
+    </nav>
+
+    <main class="content">
+      <!-- BUSCA PACIENTE -->
+      <div class="card">
+        <div class="card-header"><div class="ch-icon blue">🔍</div><h2>Buscar Paciente</h2></div>
+        <div class="search-row">
+          <input type="text" id="busca-input" placeholder="Buscar por CPF ou nome do paciente…">
+          <button class="btn blue" onclick="buscarPaciente()">Buscar</button>
+        </div>
+        <div class="msg" id="msg-busca"></div>
+      </div>
+
+      <!-- PACIENTE SELECIONADO (badge) -->
+      <div id="paciente-selecionado" style="display:none">
+        <div class="paciente-badge">
+          <div class="paciente-badge-icon">👤</div>
+          <div class="paciente-badge-info">
+            <strong id="pac-nome-badge">–</strong>
+            <span id="pac-info-badge">CPF: – | Condição: –</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AFERIÇÃO DOS SINAIS VITAIS -->
+      <div id="card-afericao" style="display:none">
+        <div class="card">
+          <div class="card-header"><div class="ch-icon green">🩺</div><h2>Aferição dos Sinais Vitais</h2></div>
+          <form id="form-afericao">
+            <div class="form-grid">
+              <div class="field"><label>Data e Hora</label><input type="datetime-local" id="dataHora" required></div>
+              <div class="field"><label>Pressão Sistólica</label><input type="number" id="pa_sistolica" min="50" max="300" required></div>
+              <div class="field"><label>Pressão Diastólica</label><input type="number" id="pa_diastolica" min="30" max="200" required></div>
+              <div class="field"><label>Frequência Cardíaca</label><input type="number" id="frequencia_cardiaca" min="30" max="250" required></div>
+              <div class="field"><label>Temperatura (°C)</label><input type="number" id="temperatura" step="0.1" min="34" max="42" required></div>
+              <div class="field"><label>Glicemia (mg/dL)</label><input type="number" id="glicemia" min="20" max="600" required></div>
+              <div class="field"><label>Saturação SpO₂ (%)</label><input type="number" id="saturacao" min="0" max="100" required></div>
+            </div>
+            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+              <button type="submit" class="btn green">💾 Salvar Aferição</button>
+            </div>
+            <div class="msg" id="msg-afericao"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- EVOLUÇÃO DA CONSULTA -->
+      <div id="card-evolucao" style="display:none">
+        <div class="card">
+          <div class="card-header"><div class="ch-icon purple">📋</div><h2>Evolução da Consulta</h2></div>
+          <form id="form-evolucao">
+            <div class="form-grid">
+              <div class="field field-full">
+                <label>Queixa Principal / Motivo do Atendimento</label>
+                <textarea id="queixa_principal" placeholder="Descreva a queixa principal ou motivo da consulta..." rows="3"></textarea>
+              </div>
+              <div class="field field-full">
+                <label>Evolução Clínica / Observações</label>
+                <textarea id="evolucao_clinica" placeholder="Registre a evolução do quadro clínico, sinais e sintomas observados, resposta ao tratamento, intercorrências..." rows="5" required></textarea>
+              </div>
+              <div class="field field-full">
+                <label>Conduta / Plano Terapêutico</label>
+                <textarea id="conduta" placeholder="Descreva a conduta adotada, ajustes no tratamento, orientações fornecidas ao paciente..." rows="4"></textarea>
+              </div>
+              <div class="field">
+                <label>Próximo Retorno</label>
+                <input type="date" id="proximo_retorno">
+              </div>
+              <div class="field">
+                <label>Data e Hora do Registro</label>
+                <input type="datetime-local" id="data_evolucao" required>
+              </div>
+            </div>
+            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+              <button type="submit" class="btn green">💾 Salvar Evolução</button>
+            </div>
+            <div class="msg" id="msg-evolucao"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- CADASTRAR PACIENTE -->
+      <div class="card" id="card-cadastro" style="display:none">
+        <div class="card-header"><div class="ch-icon green">➕</div><h2>Cadastrar Novo Paciente</h2></div>
+        <form id="form-paciente">
+          <div class="form-grid">
+            <div class="field"><label>Nome *</label><input type="text" name="nome" required placeholder="Nome completo"></div>
+            <div class="field"><label>Data de Nascimento *</label><input type="date" name="data_nascimento" required></div>
+            <div class="field"><label>CPF *</label><input type="text" name="cpf" required placeholder="000.000.000-00"></div>
+            <div class="field"><label>Telefone</label><input type="text" name="telefone" placeholder="(37) 99999-9999"></div>
+            <div class="field field-full"><label>Endereço</label><input type="text" name="endereco" placeholder="Rua, número, bairro, cidade"></div>
+            <div class="field">
+              <label>Sexo *</label>
+              <select name="sexo" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="nao_binario">Não Binário</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Condição *</label>
+              <select name="condicao" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="diabetes">Diabetes</option>
+                <option value="hipertensao">Hipertensão</option>
+                <option value="obesidade">Obesidade</option>
+                <option value="doenca_cardiaca">Doença Cardíaca</option>
+                <option value="doenca_renal">Doença Renal</option>
+                <option value="doenca_pulmonar">Doença Pulmonar</option>
+              </select>
+            </div>
+            <label>Gestante?</label>
+            <select name="Gestante" required>
+              <option value="" disabled selected></option>
+              <option value="sim">Sim</option>
+              <option value="nao">Não</option>
+            </select>
+
+            <div class="field">
+              <label>Profissional Responsável *</label>
+              <select name="profissional_responsavel" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="medico">Médico</option>
+                <option value="nutricionista">Nutricionista</option>
+                <option value="psicologo">Psicólogo</option>
+                <option value="fisioterapeuta">Fisioterapeuta</option>
+                <option value="enfermeira">Enfermeira</option>
+                <option value="familiar">Familiar</option>
+              </select>
+            </div>
+            <div class="field"><label>Nome do Profissional *</label><input type="text" name="profissional_responsavel_nome" required placeholder="Nome do responsável"></div>
+          </div>
+          <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+            <button type="submit" class="btn green">✅ Salvar Paciente</button>
+            <button type="button" class="btn blue" onclick="toggleCadastro()">Cancelar</button>
+          </div>
+          <div class="msg" id="msg-cadastro"></div>
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  </button>
+
+          <a class="btn btn-primary" href="https://esus.divinopolis.mg.gov.br/acompanhamentos/condicoes-saude">
+            Acessar PEC - Condições de Saúde
+          </a>
+
+  <footer>&copy; 2026 Doenças Crônicas. Todos os direitos reservados.</footer>
+
+  <script>
+    const API = 'http://127.0.0.1:5000';
+
+    // Verifica sessão
+    const responsavel = JSON.parse(sessionStorage.getItem('dc_responsavel') || 'null');
+    if (!responsavel) {
+      window.location.href = 'login.html?perfil=profissional';
+    } else {
+      document.getElementById('user-pill').textContent = responsavel.nome;
+      document.getElementById('hero-name').textContent = `Bem-vindo(a), ${responsavel.nome.split(' ')[0]}! 👋`;
+    }
+
+    function logout() {
+      sessionStorage.removeItem('dc_responsavel');
+      sessionStorage.removeItem('dc_resp_sessao');
+      localStorage.removeItem('dc_resp_lembrar');
+      window.location.href = 'index.html';
+    }
+
+    function toggleCadastro() {
+      const c = document.getElementById('card-cadastro');
+      c.style.display = c.style.display === 'none' ? 'block' : 'none';
+      if (c.style.display === 'block') c.scrollIntoView({ behavior:'smooth' });
+    }
+
+    // Variável global para paciente selecionado
+    let pacienteSelecionado = null;
+
+    // BUSCAR PACIENTE
+    async function buscarPaciente() {
+      const termo = document.getElementById('busca-input').value.trim();
+      const msg   = document.getElementById('msg-busca');
+      msg.textContent=''; msg.className='msg';
+      if (!termo) return;
+      try {
+        let pac = null;
+        const r1 = await fetch(`${API}/api/pacientes/${encodeURIComponent(termo)}`);
+        if (r1.ok) {
+          pac = await r1.json();
+        } else {
+          const r2 = await fetch(`${API}/api/pacientes`);
+          if (r2.ok) {
+            const lista = await r2.json();
+            pac = lista.find(p => p.nome?.toLowerCase().includes(termo.toLowerCase())) || null;
+          }
+        }
+        if (!pac) {
+          msg.textContent='Paciente não encontrado. Cadastre-o usando o botão ➕.';
+          msg.className='msg err';
+          esconderCardsPaciente();
+          pacienteSelecionado = null;
+          return;
+        }
+        exibirPacienteSelecionado(pac);
+        pacienteSelecionado = pac;
+        msg.textContent=`✅ Paciente encontrado: ${pac.nome}`; msg.className='msg ok';
+      } catch(err) {
+        msg.textContent='Falha na comunicação com a API.'; msg.className='msg err';
+      }
+    }
+
+    function exibirPacienteSelecionado(p) {
+      document.getElementById('pac-nome-badge').textContent = p.nome || '–';
+      document.getElementById('pac-info-badge').textContent = `CPF: ${p.cpf || '–'} | Condição: ${p.condicao || '–'}`;
+      document.getElementById('paciente-selecionado').style.display = 'block';
+      document.getElementById('card-afericao').style.display = 'block';
+      document.getElementById('card-evolucao').style.display = 'block';
+      
+      // Define data/hora atual nos campos
+      const agora = new Date();
+      const dataHoraLocal = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById('dataHora').value = dataHoraLocal;
+      document.getElementById('data_evolucao').value = dataHoraLocal;
+    }
+
+    function esconderCardsPaciente() {
+      document.getElementById('paciente-selecionado').style.display = 'none';
+      document.getElementById('card-afericao').style.display = 'none';
+      document.getElementById('card-evolucao').style.display = 'none';
+    }
+
+    // ENTER na busca
+    document.getElementById('busca-input').addEventListener('keypress', e => { if (e.key==='Enter') buscarPaciente(); });
+
+    // CADASTRAR PACIENTE
+    document.getElementById('form-paciente').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg-cadastro');
+      msg.textContent=''; msg.className='msg';
+      const fd = new FormData(this);
+      const payload = Object.fromEntries(fd.entries());
+
+      try {
+        const resp  = await fetch(`${API}/api/pacientes`, {
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+        });
+        const dados = await resp.json().catch(()=>null);
+        if (!resp.ok) {
+          msg.textContent = dados?.erro || 'Erro ao cadastrar.'; msg.className='msg err'; return;
+        }
+        msg.textContent=dados.mensagem||'Paciente cadastrado com sucesso!'; msg.className='msg ok';
+        this.reset();
+        setTimeout(()=>{ document.getElementById('card-cadastro').style.display='none'; }, 2000);
+      } catch(err) {
+        msg.textContent='Falha na comunicação com a API.'; msg.className='msg err';
+      }
+    });
+
+    // Formulário de aferição
+    document.getElementById('form-afericao').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg-afericao');
+      msg.textContent=''; msg.className='msg';
+      if (!pacienteSelecionado) {
+        msg.textContent = 'Selecione um paciente antes de registrar aferição.';
+        msg.className = 'msg err';
+        return;
+      }
+      const payload = {
+        paciente_id: pacienteSelecionado.id,
+        data_hora: document.getElementById('dataHora').value,
+        pa_sistolica: Number(document.getElementById('pa_sistolica').value) || null,
+        pa_diastolica: Number(document.getElementById('pa_diastolica').value) || null,
+        frequencia_cardiaca: Number(document.getElementById('frequencia_cardiaca').value) || null,
+        temperatura: Number(document.getElementById('temperatura').value) || null,
+        glicemia: Number(document.getElementById('glicemia').value) || null,
+        saturacao: Number(document.getElementById('saturacao').value) || null,
+        observacoes: null
+      };
+      try {
+        const resp  = await fetch(`${API}/api/afericoes`, {
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+        });
+        const dados = await resp.json().catch(()=>null);
+        if (!resp.ok) {
+          msg.textContent = dados?.erro || 'Erro ao registrar aferição.'; msg.className='msg err'; return;
+        }
+        msg.textContent = '✅ Aferição registrada com sucesso!'; msg.className='msg ok';
+        this.reset();
+        // Redefine data/hora
+        const agora = new Date();
+        const dataHoraLocal = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        document.getElementById('dataHora').value = dataHoraLocal;
+      } catch(err) {
+        msg.textContent='Falha na comunicação com a API.'; msg.className='msg err';
+      }
+    });
+
+    // Formulário de evolução da consulta (salvamento local com fallback para API)
+    document.getElementById('form-evolucao').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg-evolucao');
+      msg.textContent=''; msg.className='msg';
+      
+      if (!pacienteSelecionado) {
+        msg.textContent = 'Selecione um paciente antes de registrar evolução.';
+        msg.className = 'msg err';
+        return;
+      }
+
+      const payload = {
+        id: Date.now(),
+        paciente_id: pacienteSelecionado.id,
+        paciente_nome: pacienteSelecionado.nome,
+        paciente_cpf: pacienteSelecionado.cpf,
+        data_hora: document.getElementById('data_evolucao').value,
+        queixa_principal: document.getElementById('queixa_principal').value.trim(),
+        evolucao_clinica: document.getElementById('evolucao_clinica').value.trim(),
+        conduta: document.getElementById('conduta').value.trim(),
+        proximo_retorno: document.getElementById('proximo_retorno').value || null,
+        profissional_nome: responsavel.nome,
+        profissional_id: responsavel.id || null
+      };
+
+      try {
+        // Tenta salvar na API primeiro
+        const resp = await fetch(`${API}/api/evolucoes`, {
+          method:'POST', 
+          headers:{'Content-Type':'application/json'}, 
+          body:JSON.stringify(payload)
+        });
+        
+        if (resp.ok) {
+          const dados = await resp.json().catch(()=>null);
+          msg.textContent = dados?.mensagem || '✅ Evolução registrada com sucesso!'; 
+          msg.className='msg ok';
+          
+          // Salva também localmente como backup
+          salvarEvolucaoLocal(payload);
+          this.reset();
+          resetarDataHora();
+          return;
+        }
+        
+        // Se API falhar, salva localmente
+        throw new Error('API indisponível');
+        
+      } catch(err) {
+        // Fallback: salva localmente
+        console.log('Salvando evolução localmente...', err);
+        salvarEvolucaoLocal(payload);
+        msg.textContent = '✅ Evolução registrada localmente com sucesso!'; 
+        msg.className='msg ok';
+        this.reset();
+        resetarDataHora();
+      }
+    });
+
+    // Função para salvar evolução no localStorage
+    function salvarEvolucaoLocal(payload) {
+      const chave = `evolucao_${payload.paciente_id}_${payload.id}`;
+      localStorage.setItem(chave, JSON.stringify(payload));
+      
+      // Mantém lista de IDs para facilitar busca
+      const listaIds = JSON.parse(localStorage.getItem('evolucoes_ids') || '[]');
+      if (!listaIds.includes(chave)) {
+        listaIds.push(chave);
+        localStorage.setItem('evolucoes_ids', JSON.stringify(listaIds));
+      }
+    }
+
+    // Função auxiliar para resetar data/hora
+    function resetarDataHora() {
+      const agora = new Date();
+      const dataHoraLocal = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById('data_evolucao').value = dataHoraLocal;
+    }
+  </script>
+</body>
+</html>

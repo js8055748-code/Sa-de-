@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidades de Saúde – Doenças Crônicas</title>
+  <style>body{font-family:system-ui,sans-serif}</style>
+  <style>
+    :root{
+      --blue-dark:#0a2540;--blue-mid:#1565c0;--blue-light:#4fc3f7;
+      --green:#2e7d32;--green-light:#66bb6a;
+      --orange:#e65100;--orange-light:#ffa726;
+      --bg:#f0f4f8;--white:#fff;--text:#1a2332;--muted:#546e7a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    .site-header{
+      background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue-mid) 60%,#0288d1 100%);
+      padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;
+      box-shadow:0 2px 12px rgba(0,0,0,0.25);
+    }
+    .logo{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+
+    .hero-strip{
+      background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);
+      padding:24px 24px 28px;color:#fff;
+    }
+    .hero-strip h1{font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px}
+    .hero-strip p{font-size:0.88rem;opacity:.9}
+
+    .shell{max-width:900px;margin:0 auto;padding:28px 20px 48px}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue-mid);text-decoration:none;font-weight:700;font-size:0.88rem;margin-bottom:20px}
+    .back-link:hover{text-decoration:underline}
+
+    /* Tipo buttons */
+    .tipo-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+    .tipo-btn{
+      padding:10px 22px;border-radius:999px;border:2px solid transparent;
+      font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;transition:all .2s;
+      background:#fff;color:var(--muted);border-color:#e0e7ef;
+    }
+    .tipo-btn:hover,.tipo-btn.active{border-color:var(--blue-mid);color:var(--blue-mid);background:#e3f2fd}
+    .tipo-btn.hosp:hover,.tipo-btn.hosp.active{border-color:#c62828;color:#c62828;background:#ffebee}
+    .tipo-btn.clin:hover,.tipo-btn.clin.active{border-color:var(--green);color:var(--green);background:#e8f5e9}
+    .tipo-btn.post:hover,.tipo-btn.post.active{border-color:var(--orange);color:var(--orange);background:#fff3e0}
+
+    /* Cards */
+    .unidades-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+    .u-card{
+      background:#fff;border-radius:14px;padding:20px;
+      box-shadow:0 2px 12px rgba(0,0,0,0.08);border:1px solid #e8edf3;
+      border-top:4px solid var(--blue-mid);transition:box-shadow .2s;
+    }
+    .u-card:hover{box-shadow:0 6px 24px rgba(0,0,0,0.12)}
+    .u-card.HOSPITAL{border-top-color:#c62828}
+    .u-card.CLINICA{border-top-color:var(--green)}
+    .u-card.POSTO{border-top-color:var(--orange)}
+    .u-card h3{font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;color:var(--blue-dark);margin-bottom:10px}
+    .u-row{font-size:0.83rem;color:var(--muted);margin-bottom:6px;display:flex;align-items:flex-start;gap:6px}
+    .u-row strong{color:var(--text);font-weight:700;flex-shrink:0}
+    .u-row a{color:var(--blue-mid);text-decoration:none}
+    .u-row a:hover{text-decoration:underline}
+    .btn-sobre{
+      margin-top:12px;padding:7px 18px;border-radius:999px;border:none;
+      background:var(--orange-light);color:#fff;font-family:'Nunito',sans-serif;
+      font-size:0.82rem;font-weight:800;cursor:pointer;transition:background .2s;
+    }
+    .btn-sobre:hover{background:var(--orange)}
+
+    /* Detalhes */
+    .detalhes-card{
+      background:#fff;border-radius:14px;padding:24px;margin-top:20px;
+      box-shadow:0 2px 16px rgba(0,0,0,0.08);border:1px solid #e8edf3;border-left:5px solid var(--orange);
+      display:none;
+    }
+    .detalhes-card.show{display:block}
+    .detalhes-card h2{font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;color:var(--blue-dark);margin-bottom:12px}
+    .detalhes-card p{font-size:0.88rem;color:var(--muted);margin-bottom:6px}
+    .detalhes-card strong{color:var(--text)}
+
+    .empty-state{text-align:center;padding:40px;color:var(--muted);font-size:0.9rem}
+
+    /* Indicadores */
+    .indicadores-box{
+      margin-top:24px;
+      background:#fff;
+      border-radius:14px;
+      padding:16px 20px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+      border:1px solid #e0e7ef;
+    }
+    .indicadores-box h2{
+      font-family:'Nunito',sans-serif;
+      font-size:1rem;
+      font-weight:800;
+      color:var(--blue-dark);
+      margin-bottom:8px;
+    }
+    .indicadores-box p{
+      font-size:0.86rem;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .badge-ind{
+      display:inline-block;
+      min-width:80px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#e3f2fd;
+      color:var(--blue-mid);
+      font-size:0.86rem;
+      font-weight:700;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="paciente.html" class="logo">❤️ Doenças Crônicas</a>
+  </header>
+
+  <div class="hero-strip">
+    <h1>🏥 Unidades de Saúde</h1>
+    <p>Encontre hospitais, clínicas e postos de saúde em Divinópolis – MG</p>
+  </div>
+
+  <div class="shell">
+    <a href="#" class="back-link" id="back-link">← Voltar ao painel</a>
+
+    <!-- Bloco de indicadores da unidade (novo) -->
+    <div class="indicadores-box">
+      <h2>Indicadores da Atenção Primária (CNES 1234567)</h2>
+      <p>Total de atendimentos no período: <span class="badge-ind" id="total_atendimentos">-</span></p>
+      <p>Total de pacientes atendidos: <span class="badge-ind" id="total_pacientes">-</span></p>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:6px;">
+        Período: <span id="ind-periodo">–</span>
+      </p>
+    </div>
+
+    <div class="tipo-row">
+      <button class="tipo-btn hosp" onclick="filtrar('HOSPITAL')">🏥 Hospitais</button>
+      <button class="tipo-btn clin" onclick="filtrar('CLINICA')">🏢 Clínicas</button>
+      <button class="tipo-btn post" onclick="filtrar('POSTO')">🏠 Postos de Saúde</button>
+    </div>
+
+    <div class="unidades-grid" id="unidades-grid">
+      <div class="empty-state">Selecione um tipo de unidade acima para visualizar.</div>
+    </div>
+
+    <div class="detalhes-card" id="detalhes-card">
+      <h2 id="det-nome">–</h2>
+      <p><strong>Endereço:</strong> <span id="det-end">–</span></p>
+      <p><strong>Telefone:</strong> <span id="det-tel">–</span></p>
+      <div id="det-sobre"></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const link = document.getElementById('back-link');
+      if (sessionStorage.getItem('dc_paciente')) {
+        link.href = 'paciente.html';
+      } else if (sessionStorage.getItem('dc_responsavel')) {
+        link.href = 'responsavel.html';
+      }
+    })();
+
+    const unidades = [
+      { tipo:"HOSPITAL", nome:"Hospital São João de Deus", endereco:"Rua Rio de Janeiro, 599 - Centro", telefone:"(37) 3221-1234" },
+      { tipo:"HOSPITAL", nome:"Hospital Santa Lucia", endereco:"Av. JK, 350 - Santa Clara, Divinópolis - MG, 35500-155", telefone:"(37) 3229-4700" },
+      { tipo:"HOSPITAL", nome:"Hospital São Judas Tadeu", endereco:"R. Cel. João Notini, 150 - 2° andar - Centro, Divinópolis - MG, 35500-017", telefone:"(37) 3512-1400" },
+      { tipo:"HOSPITAL", nome:"Hospital Santa Mônica", endereco:"R. Pedro F. Amaral, 33 - Padre Liberio, Divinópolis - MG, 35502-562", telefone:"(37) 2102-5600" },
+      { tipo:"HOSPITAL", nome:"Upa Padre Roberto", endereco:"R. Nilo Maciel, 241 - Pte. Funda, Divinópolis - MG, 35500-485", telefone:"(37) 3512-9004" },
+      { tipo:"CLINICA",  nome:"Clínica Vital",             endereco:"Rua São Paulo, 200 - Centro", telefone:"(37) 3223-9876" },
+      { tipo:"CLINICA",  nome:"Clínica Saúde Total",       endereco:"Av. 1º de Junho, 500 - Vila Pinto", telefone:"(37) 3224-4567" },
+      {
+        tipo:"POSTO", nome:"Posto de Saúde Ipiranga",
+        endereco:"Rua Minas Gerais, 2061 - Divinópolis", telefone:"(37) 3215-4307",
+        sobre:"<strong>Horário:</strong> Segunda a Sexta, 07h às 17h"
+      },
+      {
+        tipo:"POSTO", nome:"UBS Central",
+        endereco:"Av. Cel. Júlio Ribeiro Gontijo, 370 - Esplanada", telefone:"(37) 3222-9940",
+        sobre:"<strong>Horário:</strong> Segunda a Sexta, 07h às 17h"
+      },
+      {
+        tipo:"POSTO", nome:"UBS São José / Catalão / Bela Vista",
+        endereco:"Rua Júlio Nogueira, 1320 - Bela Vista", telefone:"(37) 3229-6080",
+        sobre:"<strong>Horário:</strong> Segunda a Sexta, 07h às 17h"
+      },
+      {
+        tipo:"POSTO", nome:"UBS Tietê / São Roque",
+        endereco:"Alameda Rio Caiapó, 131 - Danilo Passos II", telefone:"(37) 3229-6875",
+        sobre:"<strong>Horário:</strong> Segunda a Sexta, 07h às 17h"
+      },
+      {
+        tipo:"POSTO", nome:"UBS Esplanada",
+        endereco:"Rua Rio Grande do Sul, 1000 - Esplanada", telefone:"(37) 3222-9940",
+        sobre:"<strong>Horário:</strong> Segunda a Sexta, 07h às 17h"
+      },
+      {
+        tipo:"POSTO", nome:"UBS Nossa Senhora Aparecida",
+        endereco:"Rua Minas Gerais, 2061 - Divinópolis", telefone:"(37) 3215-4307",
+        sobre:"<strong>Horário:</strong> Segunda a Sexta, 07h às 17h"
+      }
+    ];
+
+    let tipoAtual = '';
+
+    function filtrar(tipo) {
+      tipoAtual = tipo;
+      document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const grid = document.getElementById('unidades-grid');
+      const lista = unidades.filter(u => u.tipo === tipo);
+
+      if (!lista.length) {
+        grid.innerHTML='<div class="empty-state">Nenhuma unidade encontrada.</div>';
+        return;
+      }
+
+      grid.innerHTML = lista.map((u,i) => `
+        <div class="u-card ${u.tipo}">
+          <h3>${u.nome}</h3>
+          <div class="u-row"><strong>Endereço:</strong><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.endereco+', Divinópolis, MG')}" target="_blank">${u.endereco}</a></div>
+          <div class="u-row"><strong>Telefone:</strong> ${u.telefone}</div>
+          ${u.sobre ? `<button class="btn-sobre" onclick="mostrarDetalhes(${i})">Ver Horários</button>` : ''}
+        </div>
+      `).join('');
+
+      document.getElementById('detalhes-card').classList.remove('show');
+    }
+
+    function mostrarDetalhes(idx) {
+      const lista = unidades.filter(u => u.tipo === tipoAtual);
+      const u = lista[idx];
+      if (!u) return;
+      document.getElementById('det-nome').textContent = u.nome;
+      document.getElementById('det-end').textContent  = u.endereco;
+      document.getElementById('det-tel').textContent  = u.telefone;
+      document.getElementById('det-sobre').innerHTML  = u.sobre || '';
+      const card = document.getElementById('detalhes-card');
+      card.classList.add('show');
+      card.scrollIntoView({ behavior:'smooth' });
+    }
+
+    // ------- NOVO: carregar indicadores da API --------
+    async function carregarIndicadores() {
+      const cnes = "1234567"; // depois podemos tornar dinâmico
+      const inicio = "2026-01-01";
+      const fim = "2026-01-31";
+
+      try {
+        const resp = await fetch(`/api/indicadores/unidade/${cnes}?inicio=${inicio}&fim=${fim}`);
+        if (!resp.ok) {
+          throw new Error("Erro ao buscar indicadores: " + resp.status);
+        }
+        const dados = await resp.json();
+        console.log("Indicadores:", dados);
+
+        document.getElementById("total_atendimentos").innerText =
+          dados.indicadores.total_atendimentos.valor;
+
+        document.getElementById("total_pacientes").innerText =
+          dados.indicadores.total_pacientes_atendidos.valor;
+
+        document.getElementById("ind-periodo").innerText =
+          `${dados.periodo_inicio} a ${dados.periodo_fim}`;
+      } catch (e) {
+        console.error(e);
+        alert("Falha ao carregar indicadores.");
+      }
+    }
+
+    // Chama a função quando a página carregar
+    window.addEventListener("load", carregarIndicadores);
+  </script>
+</body>
+</html>

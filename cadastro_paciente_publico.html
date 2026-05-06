@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Paciente – Doenças Crônicas</title>
+  <style>
+    :root{
+      --blue-dark:#0a2540;--blue-mid:#1565c0;--blue-light:#4fc3f7;
+      --green:#2e7d32;--green-light:#66bb6a;
+      --bg:#f0f4f8;--white:#fff;--text:#1a2332;--muted:#546e7a;
+      --err:#c62828;--ok:#2e7d32;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+    .site-header{
+      background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue-mid) 60%,#0288d1 100%);
+      padding:0 24px;display:flex;align-items:center;height:64px;box-shadow:0 2px 12px rgba(0,0,0,0.25);
+    }
+    .logo{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+
+    .hero-strip{
+      background:linear-gradient(135deg,var(--blue-mid) 0%,#0288d1 100%);
+      padding:24px;color:#fff;text-align:center;
+    }
+    .hero-strip h1{font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:800}
+    .hero-strip p{font-size:0.9rem;margin-top:6px;opacity:0.9}
+
+    .shell{max-width:680px;margin:0 auto;padding:32px 20px 60px}
+
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue-mid);text-decoration:none;font-weight:700;font-size:0.88rem;margin-bottom:20px}
+    .back-link:hover{text-decoration:underline}
+
+    .card{background:#fff;border-radius:16px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,0.08);border:1px solid #e8edf3}
+
+    .section-title{font-size:0.78rem;font-weight:800;color:var(--blue-mid);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 14px;padding-bottom:6px;border-bottom:2px solid #e3ecf7}
+    .section-title:first-of-type{margin-top:0}
+
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+
+    .field{display:flex;flex-direction:column;gap:5px}
+    .field label{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+    .field input,.field select{
+      padding:11px 14px;border-radius:10px;border:1.5px solid #cdd5df;background:#f8fafc;
+      color:var(--text);font-family:inherit;font-size:0.9rem;transition:border-color .2s,box-shadow .2s;
+    }
+    .field input:focus,.field select:focus{outline:none;border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(21,101,192,.1);background:#fff}
+    .field select option{background:#fff}
+    .field-full{grid-column:1/-1}
+
+    .senha-wrap{position:relative}
+    .senha-wrap input{width:100%;padding-right:44px}
+    .toggle-senha{
+      position:absolute;right:12px;top:50%;transform:translateY(-50%);
+      background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--muted);padding:2px;
+    }
+
+    .strength-bar{height:4px;border-radius:2px;margin-top:6px;background:#e0e7ef;overflow:hidden}
+    .strength-bar-fill{height:100%;width:0;border-radius:2px;transition:width .3s,background .3s}
+
+    .submit-row{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+
+    .btn{
+      padding:14px 36px;border-radius:999px;border:none;font-family:'Nunito',sans-serif;
+      font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;width:100%;
+    }
+    .btn.blue{background:var(--blue-mid);color:#fff}
+    .btn.blue:hover{background:var(--blue-dark)}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+
+    .msg{font-size:0.87rem;font-weight:600;min-height:1rem;text-align:center;border-radius:8px;padding:8px 12px;width:100%;display:none}
+    .msg.ok{color:var(--ok);background:#e8f5e9;display:block}
+    .msg.err{color:var(--err);background:#ffebee;display:block}
+
+    .login-link{font-size:0.85rem;color:var(--muted);text-align:center}
+    .login-link a{color:var(--blue-mid);font-weight:700;text-decoration:none}
+    .login-link a:hover{text-decoration:underline}
+
+    .field-hint{font-size:0.72rem;color:var(--muted);margin-top:2px}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="logo">❤️ Doenças Crônicas</a>
+  </header>
+
+  <div class="hero-strip">
+    <h1>📋 Cadastro de Paciente</h1>
+    <p>Crie sua conta para acompanhar sua saúde ou a saúde do seu paciente.</p>
+  </div>
+
+  <div class="shell">
+    <a href="login.html?perfil=paciente" class="back-link">← Voltar ao login</a>
+
+    <div class="card">
+      <form id="form-cadastro" novalidate>
+
+        <p class="section-title">Dados Pessoais</p>
+        <div class="form-grid">
+
+          <div class="field field-full">
+            <label>Nome Completo *</label>
+            <input type="text" id="nome" placeholder="Seu nome completo" required autocomplete="name">
+          </div>
+
+          <div class="field">
+            <label>Data de Nascimento *</label>
+            <input type="date" id="data_nascimento" required>
+          </div>
+
+          <div class="field">
+            <label>CPF *</label>
+            <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14" required autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label>Telefone</label>
+            <input type="text" id="telefone" placeholder="(37) 99999-9999" maxlength="15">
+          </div>
+
+          <div class="field">
+            <label>Sexo *</label>
+            <select id="sexo" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="masculino">Masculino</option>
+              <option value="feminino">Feminino</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="field field-full">
+            <label>Endereço</label>
+            <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade">
+          </div>
+
+        </div>
+
+        <p class="section-title">Condição de Saúde</p>
+        <div class="form-grid">
+
+          <div class="field field-full">
+            <label>Condição Crônica *</label>
+            <select id="condicao" required>
+              <option value="" disabled selected>Selecione sua condição</option>
+              <option value="diabetes">Diabetes</option>
+              <option value="hipertensao">Hipertensão</option>
+              <option value="obesidade">Obesidade</option>
+              <option value="doenca_cardiaca">Doença Cardíaca</option>
+              <option value="doenca_renal">Doença Renal</option>
+              <option value="doenca_pulmonar">Doença Pulmonar</option>
+            </select>
+          </div>
+
+        </div>
+
+        <p class="section-title">Senha de Acesso</p>
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Senha *</label>
+            <div class="senha-wrap">
+              <input type="password" id="senha" placeholder="Mínimo 6 caracteres" minlength="6" required autocomplete="new-password">
+              <button type="button" class="toggle-senha" onclick="toggleSenha('senha', this)" title="Ver senha">👁️</button>
+            </div>
+            <div class="strength-bar"><div class="strength-bar-fill" id="strength-fill"></div></div>
+            <span class="field-hint" id="strength-label"></span>
+          </div>
+
+          <div class="field">
+            <label>Confirmar Senha *</label>
+            <div class="senha-wrap">
+              <input type="password" id="confirmar_senha" placeholder="Repita a senha" required autocomplete="new-password">
+              <button type="button" class="toggle-senha" onclick="toggleSenha('confirmar_senha', this)" title="Ver senha">👁️</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="submit-row">
+          <div class="msg" id="msg"></div>
+          <button type="submit" class="btn blue" id="btn-submit">Criar Minha Conta</button>
+          <p class="login-link">Já tem cadastro? <a href="login.html?perfil=paciente">Faça login aqui</a></p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://127.0.0.1:5000';
+
+    // Máscara CPF
+    document.getElementById('cpf').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '').slice(0, 11);
+      if (v.length > 9) v = v.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+      else if (v.length > 6) v = v.replace(/^(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+      else if (v.length > 3) v = v.replace(/^(\d{3})(\d{0,3})/, '$1.$2');
+      this.value = v;
+    });
+
+    // Máscara telefone
+    document.getElementById('telefone').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '').slice(0, 11);
+      if (v.length > 6) v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3');
+      else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+      this.value = v;
+    });
+
+    // Força da senha
+    document.getElementById('senha').addEventListener('input', function() {
+      const v = this.value;
+      const fill = document.getElementById('strength-fill');
+      const label = document.getElementById('strength-label');
+      let score = 0;
+      if (v.length >= 6) score++;
+      if (v.length >= 10) score++;
+      if (/[A-Z]/.test(v)) score++;
+      if (/[0-9]/.test(v)) score++;
+      if (/[^A-Za-z0-9]/.test(v)) score++;
+      const levels = [
+        { pct: '0%', color: '#e0e7ef', txt: '' },
+        { pct: '25%', color: '#ef5350', txt: 'Muito fraca' },
+        { pct: '50%', color: '#ffa726', txt: 'Fraca' },
+        { pct: '75%', color: '#ffee58', txt: 'Boa' },
+        { pct: '90%', color: '#66bb6a', txt: 'Forte' },
+        { pct: '100%', color: '#2e7d32', txt: 'Muito forte' },
+      ];
+      const l = levels[Math.min(score, 5)];
+      fill.style.width = l.pct;
+      fill.style.background = l.color;
+      label.textContent = l.txt;
+    });
+
+    function toggleSenha(id, btn) {
+      const inp = document.getElementById(id);
+      const visible = inp.type === 'text';
+      inp.type = visible ? 'password' : 'text';
+      btn.textContent = visible ? '👁️' : '🙈';
+    }
+
+    document.getElementById('form-cadastro').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      const btn = document.getElementById('btn-submit');
+      msg.textContent = ''; msg.className = 'msg';
+
+      const nome            = document.getElementById('nome').value.trim();
+      const data_nascimento = document.getElementById('data_nascimento').value;
+      const cpf             = document.getElementById('cpf').value.trim();
+      const telefone        = document.getElementById('telefone').value.trim();
+      const endereco        = document.getElementById('endereco').value.trim();
+      const sexo            = document.getElementById('sexo').value;
+      const condicao        = document.getElementById('condicao').value;
+      const senha           = document.getElementById('senha').value;
+      const confirmar       = document.getElementById('confirmar_senha').value;
+
+      if (!nome || !data_nascimento || !cpf || !sexo || !condicao) {
+        msg.textContent = 'Preencha todos os campos obrigatórios (*).';
+        msg.className = 'msg err'; return;
+      }
+
+      const cpf_limpo = cpf.replace(/\D/g, '');
+      if (cpf_limpo.length !== 11) {
+        msg.textContent = 'CPF inválido. Informe os 11 dígitos.';
+        msg.className = 'msg err'; return;
+      }
+
+      if (senha.length < 6) {
+        msg.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+        msg.className = 'msg err'; return;
+      }
+
+      if (senha !== confirmar) {
+        msg.textContent = 'As senhas não coincidem.';
+        msg.className = 'msg err'; return;
+      }
+
+      btn.disabled = true; btn.textContent = 'Cadastrando…';
+
+      try {
+        const resp = await fetch(`${API}/api/pacientes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, data_nascimento, cpf, telefone, endereco, sexo, condicao, senha })
+        });
+        const dados = await resp.json().catch(() => null);
+
+        if (!resp.ok) {
+          msg.textContent = dados?.erro || 'Erro ao realizar o cadastro.';
+          msg.className = 'msg err';
+          btn.disabled = false; btn.textContent = 'Criar Minha Conta'; return;
+        }
+
+        msg.textContent = 'Cadastro realizado com sucesso! Redirecionando para o login…';
+        msg.className = 'msg ok';
+        setTimeout(() => { window.location.href = 'login.html?perfil=paciente&cadastro=ok'; }, 2000);
+
+      } catch (err) {
+        msg.textContent = 'Falha na comunicação com o servidor.';
+        msg.className = 'msg err';
+        btn.disabled = false; btn.textContent = 'Criar Minha Conta';
+      }
+    });
+  </script>
+</body>
+</html>

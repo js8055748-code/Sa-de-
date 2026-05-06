@@ -1,0 +1,9 @@
+{
+  "id_paciente": 1,
+  "medicamento": "Losartana 50mg",
+  "dose": "1 comprimido",
+  "via": "VO",
+  "frequencia": "2x/dia",
+  "data_hora": "2026-04-21T08:00:00",
+  "responsavel": "Enf. Maria"
+}
