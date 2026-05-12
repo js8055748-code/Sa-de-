@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- templates/indicadores.html -->
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -287,4 +288,295 @@
         }
     </script>
 </body>
+=======
+<!-- templates/indicadores.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+
+    <title>Indicadores de Doenças Crônicas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Indicadores de Doenças Crônicas">
+    <meta name="author" content="Juarez Silva - Desenvolvedor Full Stack">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        p {
+            color: #555;
+        }
+
+        .select-row {
+            margin-bottom: 20px;
+        }
+
+        fieldset {
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            padding: 15px;
+        }
+
+        #status-carregando {
+            display: none;
+            color: #0066cc;
+            margin-top: 10px;
+        }
+
+        #status-erro {
+            display: none;
+            color: #cc0000;
+            margin-top: 10px;
+        }
+
+        .indicador-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .indicador-card {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            background-color: #fafafa;
+        }
+
+        .indicador-card h3 {
+            margin: 0 0 6px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .indicador-card p {
+            margin: 2px 0;
+            font-size: 14px;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #777;
+        }
+
+        a.voltar {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #0066cc;
+        }
+
+        a.voltar:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Indicadores de Doenças Crônicas</h1>
+    <p>Selecione a unidade de saúde para visualizar os indicadores atualizados de doenças crônicas da Atenção Primária.</p>
+
+    <div class="select-row">
+        <label for="unidade"><strong>Unidade de Saúde:</strong></label>
+        <select id="unidade" onchange="carregarIndicadores()">
+            <option value="">Selecione a unidade</option>
+            <!-- Ajuste os valores para o CNES real de cada unidade do seu município -->
+            <option value="1234567">São José</option>
+            <option value="2345678">Bela Vista</option>
+            <option value="3456789">Catalão</option>
+            <option value="4567890">Centro</option>
+            
+            <option value="0000000">Outras</option>
+        </select>
+    </div>
+
+    <div id="status-carregando">Carregando indicadores...</div>
+    <div id="status-erro"></div>
+
+    <fieldset id="indicadores-fieldset" style="display:none; margin-top:20px;">
+        <legend>Indicadores</legend>
+
+        <p class="small" id="info-unidade"></p>
+
+        <div class="indicador-grid" id="indicadores-container">
+            <!-- Cards de indicadores serão inseridos aqui via JavaScript -->
+        </div>
+
+        <p class="small" id="fonte-dados">
+            Fonte: Secretaria Municipal de Saúde / RNDS, via integração do sistema da unidade.
+        </p>
+    </fieldset>
+
+    <a href="{{ url_for('enfermeira_page') }}" class="voltar">Voltar</a>
+
+    <script>
+        // Mapeia CNES para nome da unidade (para exibir no texto)
+        const mapaUnidades = {
+            "1234567": "São José",
+            "2345678": "Bela Vista",
+            "3456789": "Catalão",
+            "0000000": "Outras"
+        };
+
+        async function carregarIndicadores() {
+            const select = document.getElementById('unidade');
+            const cnes = select.value;
+
+            const fieldset = document.getElementById('indicadores-fieldset');
+            const container = document.getElementById('indicadores-container');
+            const statusCarregando = document.getElementById('status-carregando');
+            const statusErro = document.getElementById('status-erro');
+            const infoUnidade = document.getElementById('info-unidade');
+
+            // Limpa UI
+            statusErro.style.display = 'none';
+            statusErro.textContent = '';
+            container.innerHTML = '';
+            fieldset.style.display = 'none';
+
+            if (!cnes) {
+                return;
+            }
+
+            statusCarregando.style.display = 'block';
+
+            try {
+                // Aqui usamos a rota Flask que você já definiu em app.py:
+                // /api/indicadores/unidade/<cnes>?inicio=AAAA-MM-DD&fim=AAAA-MM-DD
+                const hoje = new Date();
+                const ano = hoje.getFullYear();
+                const mes = (hoje.getMonth() + 1).toString().padStart(2, '0');
+                const inicio = `${ano}-${mes}-01`;
+                const fim = `${ano}-${mes}-28`; // ou calcule o último dia do mês
+
+                const url = `/api/indicadores/unidade/${encodeURIComponent(cnes)}?inicio=${inicio}&fim=${fim}`;
+
+                const resp = await fetch(url);
+                if (!resp.ok) {
+                    throw new Error('Erro ao obter indicadores da unidade (HTTP ' + resp.status + ').');
+                }
+
+                const dados = await resp.json();
+
+                // Exemplo: esperamos um JSON do tipo:
+                // {
+                //   "hipertensao_total": 145,
+                //   "hipertensos_acompanhados": 120,
+                //   "diabetes_total": 80,
+                //   "diabeticos_controlados": 50,
+                //   "ultima_atualizacao": "2026-05-05T12:00:00"
+                // }
+                //
+                // Adapte estes nomes ao que a função calcular_indicadores_unidade realmente devolve.
+
+                const nomeUnidade = mapaUnidades[cnes] || 'Unidade não identificada';
+                infoUnidade.textContent = `Unidade: ${nomeUnidade} (CNES: ${cnes})`;
+
+                // Monta cards de indicadores dinamicamente
+                // Você pode ajustar/expandir conforme o JSON retornado
+                const definicoes = [
+                    {
+                        chave: 'hipertensao_total',
+                        titulo: 'Total de Pacientes com Hipertensão',
+                        descricao: 'Número de usuários cadastrados com diagnóstico de hipertensão arterial.'
+                    },
+                    {
+                        chave: 'hipertensos_acompanhados',
+                        titulo: 'Hipertensos em Acompanhamento',
+                        descricao: 'Pacientes hipertensos com consultas e aferições em dia.'
+                    },
+                    {
+                        chave: 'diabetes_total',
+                        titulo: 'Total de Pacientes com Diabetes',
+                        descricao: 'Usuários cadastrados com diagnóstico de diabetes mellitus.'
+                    },
+                    {
+                        chave: 'diabeticos_controlados',
+                        titulo: 'Diabéticos com Controle Adequado',
+                        descricao: 'Pacientes diabéticos com parâmetros clínicos dentro da meta.'
+                    },
+                    {
+                        chave: 'asma_total',
+                        titulo: 'Pacientes com Asma',
+                        descricao: 'Usuários com diagnóstico de asma em acompanhamento.'
+                    },
+                    {
+                        chave: 'dpoc_total',
+                        titulo: 'Pacientes com DPOC',
+                        descricao: 'Usuários acompanhados por doença pulmonar obstrutiva crônica.'
+                    }
+                ];
+
+                let encontrouDados = false;
+
+                definicoes.forEach(def => {
+                    if (dados.hasOwnProperty(def.chave)) {
+                        encontrouDados = true;
+                        const valor = dados[def.chave];
+
+                        const card = document.createElement('div');
+                        card.className = 'indicador-card';
+
+                        const h3 = document.createElement('h3');
+                        h3.textContent = def.titulo;
+                        card.appendChild(h3);
+
+                        const pValor = document.createElement('p');
+                        pValor.innerHTML = `<strong>Valor: </strong> ${valor}`;
+                        card.appendChild(pValor);
+
+                        const pDesc = document.createElement('p');
+                        pDesc.textContent = def.descricao;
+                        card.appendChild(pDesc);
+
+                        container.appendChild(card);
+                    }
+                });
+
+                // Exibe data/hora da última atualização, se existir
+                if (dados.ultima_atualizacao) {
+                    const pAtualizacao = document.createElement('p');
+                    pAtualizacao.className = 'small';
+                    pAtualizacao.textContent = 'Última atualização dos dados: ' + dados.ultima_atualizacao;
+                    container.appendChild(pAtualizacao);
+                }
+
+                if (!encontrouDados) {
+                    const p = document.createElement('p');
+                    p.textContent = 'Nenhum indicador disponível para esta unidade no período selecionado.';
+                    container.appendChild(p);
+                }
+
+                fieldset.style.display = 'block';
+
+            } catch (erro) {
+                console.error(erro);
+                statusErro.style.display = 'block';
+                statusErro.textContent = 'Não foi possível carregar os indicadores desta unidade. Tente novamente mais tarde.';
+            } finally {
+                statusCarregando.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+>>>>>>> a9bb5b2 (fix: corrige entrada do backend e dependências para deploy na Vercel)
 </html>

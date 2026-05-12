@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(venv/Scripts/python.exe -c \"import flask; print\\(flask.__version__\\)\")",
+      "Bash(venv/Scripts/python.exe -c \"import flask, flask_cors, sqlite3; print\\('OK - dependencias encontradas'\\)\")",
+      "Bash(venv/Scripts/python.exe app.py)"
+    ]
+  }
+}

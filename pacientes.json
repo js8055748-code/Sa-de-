@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
   {
     "documento": "12345678900",
@@ -21,4 +22,29 @@
   }
 
   
+=======
+[
+  {
+    "documento": "12345678900",
+    "nome": "João Silva",
+    "idade": 55,
+    "condicao": "Diabetes Tipo 2",
+    "exercicios": "Caminhada leve 30 minutos por dia",
+    "dieta": "Reduzir carboidratos simples, aumentar fibras",
+    "medicacao": "Metformina 500mg, 2 vezes ao dia",
+    "acompanhamento": "Monitorar glicemia diariamente"
+  },
+  {
+    "documento": "98765432100",
+    "nome": "Maria Souza",
+    "idade": 48,
+    "condicao": "Hipertensão",
+    "exercicios": "Caminhada moderada 40 minutos, 5x por semana",
+    "dieta": "Reduzir sal e alimentos ultraprocessados",
+    "medicacao": "Losartana 50mg, 1 vez ao dia",
+    "acompanhamento": "Monitorar pressão arterial em casa"
+  }
+
+  
+>>>>>>> a9bb5b2 (fix: corrige entrada do backend e dependências para deploy na Vercel)
 ]

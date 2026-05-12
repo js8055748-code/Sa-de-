@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "id_paciente": 1,
   "medicamento": "Losartana 50mg",
@@ -6,4 +7,14 @@
   "frequencia": "2x/dia",
   "data_hora": "2026-04-21T08:00:00",
   "responsavel": "Enf. Maria"
+=======
+{
+  "id_paciente": 1,
+  "medicamento": "Losartana 50mg",
+  "dose": "1 comprimido",
+  "via": "VO",
+  "frequencia": "2x/dia",
+  "data_hora": "2026-04-21T08:00:00",
+  "responsavel": "Enf. Maria"
+>>>>>>> a9bb5b2 (fix: corrige entrada do backend e dependências para deploy na Vercel)
 }

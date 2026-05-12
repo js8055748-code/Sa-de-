@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -215,4 +216,223 @@
     </script>
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidades - TESTE</title>
+    <style>
+        #detalhes-posto {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: #fffbe6;
+        }
+
+        .btn-sobre {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-sobre:hover {
+            background-color: #0056b3;
+        }
+
+        .unidade-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .unidade-card h3 {
+            color: #007bff;
+            margin: 0 0 10px 0;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Unidades de Saúde</h1>
+    <p>Bem-vindo à página de Unidades de Saúde de Divinópolis - MG.</p>
+
+    <select id="tipo-unidade">
+        <option value="">Selecione o tipo de unidade</option>
+        <option value="HOSPITAL">Hospital</option>
+        <option value="CLINICA">Clínica</option>
+        <option value="POSTO">Posto de Saúde</option>
+    </select>
+
+    <div id="unidades-container"></div>
+
+    <div id="detalhes-posto">
+        <h2>Detalhes do posto</h2>
+        <p>Selecione um posto e clique em "Sobre" para ver mais informações aqui.</p>
+    </div>
+
+    <script>
+        // DADOS EMBUTIDOS (sem fetch/JSON externo)
+        const unidades = [
+            {
+                tipo: "HOSPITAL",
+                nome: "Hospital São João de Deus",
+                endereco: "Rua Rio de Janeiro, 599 - Centro",
+                telefone: "(37) 3221-1234"
+            },
+            {
+                tipo: "HOSPITAL",
+                nome: "Hospital Divino Salvador",
+                endereco: "Av. do Pai, 1000 - Esplanada",
+                telefone: "(37) 3222-5678"
+            },
+            {
+                tipo: "CLINICA",
+                nome: "Clínica Vital",
+                endereco: "Rua São Paulo, 200 - Centro",
+                telefone: "(37) 3223-9876"
+            },
+            {
+                tipo: "CLINICA",
+                nome: "Clínica Saúde Total",
+                endereco: "Av. 1º de Junho, 500 - Vila Pinto",
+                telefone: "(37) 3224-4567"
+            },
+            {
+                tipo: "POSTO",
+                nome: "Posto de Saúde Ipiranga",
+                endereco: "RUA MINAS GERAIS - 2061, CEP: 35502026 - Divinopolis",
+                telefone: "(37) 3215-4307 / 9221-2127",
+                sobre: `
+                    <strong>Horário de Atendimento</strong><br>
+                    Segunda-Feira a Sexta-Feira: 07:00 às 17:00 horas<br>
+                `
+            },
+            {
+                tipo: "POSTO",
+                nome: "Central",
+                endereco: "Av. Cel. Júlio Ribeiro Gontijo, 370 - Esplanada, Divinópolis - MG",
+                telefone: "(37) 3222-9940 / 3213-8883",
+                sobre: `
+                    <strong>Horário de Atendimento</strong><br>
+                    Segunda-Feira a Sexta-Feira: 07:00 às 16:00 horas<br>
+                `
+            },
+            {
+                tipo: "POSTO",
+                nome: "São José / Catalão / Bela Vista",
+                endereco: "Rua Júlio Nogueira, 1320 - Bela Vista, Divinópolis - MG",
+                telefone: "(37) 3229-6080",
+                sobre: `
+                    <strong>Horário de Atendimento</strong><br>
+                    Segunda-Feira a Sexta-Feira: 07:00 às 16:00 horas<br>
+                `
+            },
+            {
+                tipo: "POSTO",
+                nome: "Tietê / São Roque I / São Roque II",
+                endereco: "Alameda Rio Caiapó, 131 - Danilo Passos II, Divinópolis - MG",
+                telefone: "(37) 3229-6875",
+                sobre: `
+                    <strong>Horário de Atendimento</strong><br>
+                    Segunda-Feira a Sexta-Feira: 07:00 às 16:00 horas<br>
+                `
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const select = document.getElementById('tipo-unidade');
+            const container = document.getElementById('unidades-container');
+
+            // Quando muda o tipo de unidade (manual ou via URL)
+            select.addEventListener('change', function () {
+                const tipoSelecionado = this.value;
+                console.log('change disparado, tipoSelecionado =', tipoSelecionado);
+                container.innerHTML = '';
+
+                if (tipoSelecionado === '') return;
+
+                const unidadesFiltradas = unidades.filter(unidade => unidade.tipo === tipoSelecionado);
+
+                if (unidadesFiltradas.length === 0) {
+                    container.innerHTML = '<p>Nenhuma unidade encontrada.</p>';
+                    return;
+                }
+
+                unidadesFiltradas.forEach(unidade => {
+                    const card = document.createElement('div');
+                    card.className = 'unidade-card';
+
+                    const enderecoUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(unidade.endereco + ', Divinópolis, MG')}`;
+
+                    let htmlCard = `
+                        <h3>${unidade.nome}</h3>
+                        <p><strong>Endereço:</strong> <a href="${enderecoUrl}" target="_blank">${unidade.endereco}</a></p>
+                        <p><strong>Telefone:</strong> ${unidade.telefone}</p>
+                    `;
+
+                    if (unidade.tipo === 'POSTO' && unidade.sobre) {
+                        htmlCard += `
+                            <button class="btn-sobre" data-nome="${unidade.nome}">Sobre</button>
+                        `;
+                    }
+
+                    card.innerHTML = htmlCard;
+                    container.appendChild(card);
+                });
+            });
+
+            // Delegação de evento para botões "Sobre"
+            container.addEventListener('click', function (event) {
+                if (event.target.classList.contains('btn-sobre')) {
+                    const nomePosto = event.target.getAttribute('data-nome');
+                    const posto = unidades.find(u => u.nome === nomePosto && u.tipo === 'POSTO');
+
+                    if (!posto) return;
+
+                    const detalhes = document.getElementById('detalhes-posto');
+                    detalhes.innerHTML = `
+                        <h2>${posto.nome}</h2>
+                        <p><strong>Endereço:</strong> ${posto.endereco}</p>
+                        <p><strong>Telefone:</strong> ${posto.telefone}</p>
+                        <div>${posto.sobre}</div>
+                    `;
+
+                    detalhes.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            // 1) Lê o parâmetro "tipo" da URL (HOSPITAL, CLINICA ou POSTO)
+            const params = new URLSearchParams(window.location.search);
+            const tipoUrl = params.get('tipo'); // ex: "POSTO"
+            console.log('param tipo =', tipoUrl);
+
+            // 2) Se tiver parâmetro válido, seleciona no <select> e dispara o change
+            if (tipoUrl === 'HOSPITAL' || tipoUrl === 'CLINICA' || tipoUrl === 'POSTO') {
+                select.value = tipoUrl;
+                const event = new Event('change');
+                select.dispatchEvent(event);
+            }
+        });
+    </script>
+</body>
+
+>>>>>>> a9bb5b2 (fix: corrige entrada do backend e dependências para deploy na Vercel)
 </html> 

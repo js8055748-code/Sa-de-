@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 {
   "id_paciente": 1,
   "tipo": "PA",
   "valor": "120x80",
   "data_hora": "2026-04-21T16:00:00",
   "observacoes": "Sem queixas"
+=======
+{
+  "id_paciente": 1,
+  "tipo": "PA",
+  "valor": "120x80",
+  "data_hora": "2026-04-21T16:00:00",
+  "observacoes": "Sem queixas"
+>>>>>>> a9bb5b2 (fix: corrige entrada do backend e dependências para deploy na Vercel)
 }
