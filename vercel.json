@@ -2,30 +2,18 @@
   "version": 2,
   "builds": [
     {
-<<<<<<< HEAD
-      "src": "api/index.py",
-=======
       "src": "api/app.py",
->>>>>>> a9bb5b2 (fix: corrige entrada do backend e dependências para deploy na Vercel)
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-<<<<<<< HEAD
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "api/index.py"
-=======
       "dest": "api/app.py"
     },
     {
       "src": "/(.*)",
       "dest": "api/app.py"
->>>>>>> a9bb5b2 (fix: corrige entrada do backend e dependências para deploy na Vercel)
     }
   ]
 }
