@@ -296,7 +296,7 @@
   <footer>&copy; 2026 Doenças Crônicas. Todos os direitos reservados.</footer>
 
   <script>
-    const API = 'http://127.0.0.1:5000';
+    const API = window.location.origin;
 
     // Verifica sessão
     const responsavel = JSON.parse(sessionStorage.getItem('dc_responsavel') || 'null');

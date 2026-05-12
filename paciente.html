@@ -173,7 +173,7 @@
 
       // Busca dados completos do paciente na API para preencher campos extras
       if (paciente.cpf) {
-        fetch(`http://127.0.0.1:5000/api/pacientes/${encodeURIComponent(paciente.cpf)}`)
+        fetch(`${window.location.origin}/api/pacientes/${encodeURIComponent(paciente.cpf)}`)
           .then(r => r.ok ? r.json() : null)
           .then(p => {
             if (!p) return;
