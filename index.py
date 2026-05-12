@@ -9,7 +9,8 @@ import tempfile
 # CONFIGURAÇÃO FLASK PARA VERCEL
 # ------------------------------------------------------------------
 
-app = Flask(__name__, static_folder='../public', static_url_path='')
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder=ROOT_DIR, static_url_path='')
 CORS(app)
 
 # No Vercel, o sistema de arquivos é read-only exceto /tmp
@@ -140,19 +141,17 @@ init_db()
 
 @app.route('/')
 def root():
-    return send_from_directory('../public', 'login.html')
+    return send_from_directory(ROOT_DIR, 'login.html')
 
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    # Serve arquivos estáticos da pasta public
     if '.' in filename:
-        return send_from_directory('../public', filename)
-    # Tenta servir como página HTML
+        return send_from_directory(ROOT_DIR, filename)
     try:
-        return send_from_directory('../public', filename + '.html')
+        return send_from_directory(ROOT_DIR, filename + '.html')
     except Exception:
-        return send_from_directory('../public', 'login.html')
+        return send_from_directory(ROOT_DIR, 'login.html')
 
 
 # ------------------------------------------------------------------
