@@ -488,6 +488,26 @@
       </div>
 
       <div class="login-body">
+
+         <!-- PAINEL PACIENTE -->
+        <div class="panel show" id="panel-pac">
+          <form id="form-pac" autocomplete="off">
+            <div class="field">
+              <label>CPF</label>
+              <input type="text" id="pac-cpf" placeholder="000.000.000-00" autocomplete="off" required>
+            </div>
+            <div class="field">
+              <label>Senha <small style="text-transform:none;font-weight:400">(padrão: seu CPF sem pontuação)</small></label>
+              <input type="password" id="pac-senha" placeholder="••••••••" autocomplete="new-password" required>
+            </div>
+            <button type="submit" class="btn pac" id="btn-pac">
+              <span class="spinner"></span>Entrar como Paciente
+              <span class="btn-shimmer"></span>
+            </button>
+            <div class="msg" id="msg-pac"></div>
+          </form>
+          <div class="hint">Ainda não tem cadastro? <a href="cadastro_paciente_publico.html">Cadastre-se aqui</a></div>
+        </div>
        
         <!-- PAINEL PROFISSIONAL -->
         <div class="panel" id="panel-pro">
